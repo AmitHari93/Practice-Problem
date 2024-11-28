@@ -1,4 +1,6 @@
+import java.net.SocketTimeoutException;
 import java.sql.Array;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -178,14 +180,49 @@ public class Practice {
         else System.out.println("No");
     }
 
+    public static int findInversionPair(int[] arr){
+        int count_0 = 0 , count_1 = 0;
+        int inversion_pair = 0;
+        for (int j : arr) {
+            if (j == 1) count_1 ++;
+            else {
+                count_0 ++;
+                inversion_pair += count_1;
+            }
+        }
+        System.out.println("count_0: "+count_0 + " count_1: " +count_1 + " total inversion: "+ inversion_pair);
+        return getMaxInversion(arr, inversion_pair, count_0);
+    }
+
+    private static int getMaxInversion(int[] arr, int inversion_pair, int count_0) {
+        int max_inversion = inversion_pair;
+        int one = 0;
+        int zero = 0;
+
+        for(int i : arr){
+            int new_inversion_pair;
+            if(i==1){
+                new_inversion_pair = inversion_pair + one - (count_0 - zero) ;
+                one ++;
+            }
+            else{
+                zero ++;
+                new_inversion_pair = inversion_pair + (count_0 - zero) - one;
+            }
+            if(new_inversion_pair > max_inversion) max_inversion = new_inversion_pair;
+        }
+        return max_inversion;
+    }
+
     public static void main(String[] args){
 //        patternDiamond(3);
 //        halfDiamond(5);
 //        pattern_8(4);
-        int[] array = {10,7,2,1,5,4,10};
+        int[] array = {1,0,1,1,0,0,0,1};
 //        for (int j : array) {
 //            System.out.println(j);
 //        }
-        prefix_sum(array);
+//        prefix_sum(array);
+        System.out.println(findInversionPair(array));
     }
 }
