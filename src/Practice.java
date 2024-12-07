@@ -1,9 +1,7 @@
 import java.net.SocketTimeoutException;
 import java.sql.Array;
 import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Practice {
 
@@ -214,6 +212,194 @@ public class Practice {
         return max_inversion;
     }
 
+    public int[] rearrangeArray(int[] nums) {
+        int n = nums.length;
+        List<Integer> positive = new ArrayList<>();
+        List<Integer> negative = new ArrayList<>();
+        for(int num: nums){
+            if(num > 0){
+                positive.add(num);
+            }else{
+                negative.add(num);
+            }
+        }
+        for(int i=0; i<n; i += 2){
+            nums[i] = positive.get(i/2);
+            nums[i+1] = negative.get(i/2);
+        }
+        return nums;
+    }
+    public int lenOfLongestSubArray(int[] arr, int k) {
+        int n = arr.length;
+        int max_len =0;
+        Map<Integer, Integer> map = new HashMap<>();
+        int sum = 0;
+        for(int i=0; i< n; i++){
+            sum += arr[i];
+            if(sum == k){
+                max_len = Math.max(max_len, i+1);
+            }
+            if(!map.containsKey(sum-k)){
+                map.put(sum, i);
+            }else{
+                int len = i - map.get(sum-k);
+                max_len = Math.max(max_len, len);
+            }
+        }
+        return max_len;
+    }
+
+    public int longestConsecutive(int[] nums) {
+        int max_length = 0, count_length=1;
+        int n = nums.length;
+        Arrays.sort(nums);
+        for(int i=1; i<n; i++){
+            if(nums[i] - nums[i-1] == 1) count_length++;
+            else if (nums[i]-nums[i-1] > 1) {
+                max_length = Math.max(max_length, count_length);
+                count_length = 1;
+            }
+        }
+        max_length = Math.max(max_length, count_length);
+        return max_length;
+    }
+
+    public List<Integer> majorityElement(int[] nums) {
+        int count_1=0, count_2=0, el_1=Integer.MIN_VALUE,el_2=0;
+        List<Integer> ans = new ArrayList<>();
+        for(int num: nums){
+            if(count_1 == 0 && num != el_2){
+                count_1++;
+                el_1 = num;
+            } else if (count_2 == 0 && num != el_1) {
+                count_2++;
+                el_2 = num;
+            }
+            else {
+                count_1--;
+                count_2--;
+            }
+        }
+        count_1 = 0;
+        count_2=0;
+        int res = Math.floorDiv(nums.length, 3);
+        for(int num: nums){
+            if(num == el_1) count_1++;
+            if(num == el_2) count_2++;
+        }
+        if(count_1 > res) ans.add(el_1);
+        if(count_2 > res) ans.add(el_2);
+        return ans;
+    }
+
+    public int findPeakElement(int[] nums) {
+        int n = nums.length;
+        if(n==1) return 0;
+        if(nums[0] > nums[1]) return 0;
+        if (nums[n-1] > nums[n-2]) return n-1;
+        int low=1, high=n-2;
+        while(low <= high){
+            int mid = (low+high)/2;
+            if(nums[mid] > nums[mid-1] && nums[mid] > nums[mid+1]) return mid;
+            else if (nums[mid] > nums[mid-1]) {
+                low=mid+1;
+            } else if (nums[mid] > nums[mid+1]) {
+                high = mid-1;
+            }else {
+                high = mid-1;
+            }
+        }
+        return -1;
+    }
+
+    public List<Integer> findPeaks(int[] mountain) {
+        int n = mountain.length;
+        List<Integer> ans = new ArrayList<>();
+        for(int i=1; i<n-1; i++){
+            if(mountain[i] > mountain[i-1] && mountain[i] > mountain[i+1]) ans.add(i);
+        }
+        return ans;
+    }
+
+    public int countHillValley(int[] nums) {
+        int n = nums.length;
+        int hill=0, valley=0;
+        for(int i=1; i<n-1; i++){
+            if(nums[i]==nums[i+1]){
+                int rep = 0, c=i;
+                while(nums[c]==nums[c+1]){
+                    rep++;
+                    c++;
+                }
+                if(nums[i] > nums[i-1] && nums[i] > nums[c+1]){
+                    hill++;
+                    i++;
+                } else if (nums[i] < nums[i-1] && nums[i] < nums[c+1]) {
+                    valley++;
+                    i++;
+                }
+                else {
+                    i+=c;
+                }
+
+            }else{
+                if(nums[i] > nums[i-1] && nums[i] > nums[i+1]) hill++;
+                if(nums[i] < nums[i-1] && nums[i] < nums[i+1]) valley++;
+            }
+        }
+        return hill+valley;
+    }
+
+    public int minDays(int[] bloomDay, int m, int k) {
+        int totalFlowers = m*k;
+        int size = bloomDay.length;
+        if(totalFlowers > size) return -1;
+        int min =Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for(int i: bloomDay){
+            min = Math.min(min, i);
+            max = Math.max(max, i);
+        }
+        int low = min, high=max;
+        while(low <= high){
+            int days = (low+high)/2;
+            int bouquets = getBouguets(days, bloomDay, k);
+            if(bouquets <= m) low = bouquets+1;
+            else{
+                high = bouquets-1;
+            }
+        }
+        return low;
+    }
+    public int getBouguets(int day, int[] bloomDays, int pair){
+        int count=0, bouguets=0;
+        for(int bloomDay: bloomDays){
+            if(bloomDay <= day) count++;
+            else{
+                bouguets += (count/pair);
+                count=0;
+            }
+        }
+        bouguets += (count/pair);
+        return bouguets;
+    }
+
+    public int findKthPositive(int[] arr, int k) {
+        int n = arr.length;
+        int l = 0, h=n-1;
+        while(l <= h){
+            int mid = (l+h)/2;
+            int missing = arr[mid] -(mid+1);
+            if(missing < k){
+                l = mid+1;
+            }else{
+                h = mid-1;
+            }
+        }
+        return l+k;
+    }
+
+
     public static void main(String[] args){
 //        patternDiamond(3);
 //        halfDiamond(5);
@@ -223,6 +409,11 @@ public class Practice {
 //            System.out.println(j);
 //        }
 //        prefix_sum(array);
+        String s ="abc";
+        char[] a = s.toCharArray();
+        char[] b = Arrays.copyOf(a, a.length);
+        Arrays.sort(b);
+        boolean q = Arrays.equals(a, b);
         System.out.println(findInversionPair(array));
     }
 }
