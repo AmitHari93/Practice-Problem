@@ -212,6 +212,8 @@ public class Practice {
         return max_inversion;
     }
 
+    // Binary search problem
+
     public int[] rearrangeArray(int[] nums) {
         int n = nums.length;
         List<Integer> positive = new ArrayList<>();
@@ -397,6 +399,89 @@ public class Practice {
             }
         }
         return l+k;
+    }
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+        for(int i=0; i< row; i++){
+            int l=0, h = col-1;
+            while(l <= h){
+                int mid = (l+h)/2;
+                if(matrix[i][mid]==target) return true;
+                else if (matrix[i][mid] < target) {
+                    l = mid+1;
+                }else{
+                    h = mid-1;
+                }
+            }
+        }
+        return false;
+    }
+
+    int floorSqrt(int n) {
+        // Your code here
+        int l=1, h = n/2;
+        while(l<=h){
+            int mid = (l+h)/2;
+            if(mid * mid == n)  return mid;
+            else if (mid*mid < n) {
+                l = mid+1;
+            }else{
+                h = mid-1;
+            }
+        }
+        return h;
+    }
+    public int nthRoot(int n, int m) {
+        // code here
+        int l = 1, h = m/n+1;
+        while(l<=h){
+            int mid = (l+h)/2;
+            double val=Math.pow(mid, n);
+//            while(n>0){
+//                val *= mid;
+//                n--;
+//            }
+
+            if(val == m) return mid;
+            else if (val<m) {
+                l = mid+1;
+            }else{
+                h = mid-1;
+            }
+        }
+        return -1;
+    }
+
+    // Hashing problem
+    public List<Integer> frequencyCount(int[] arr) {
+        // do modify in the given array
+        int n = arr.length;
+        Map<Integer, Integer> map = new HashMap<>();
+        List<Integer> ans = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+        }
+        for(int i=1; i<=n; i++){
+            ans.add(map.getOrDefault(i, 0));
+        }
+        return ans;
+    }
+
+    public int maxFrequency(int[] nums, int k) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        int max_rep=0,l=0,r=0, total=0;
+        while(r < n){
+            total += nums[r];
+            while(nums[r]*(r-l+1) > total+k){
+                total -= nums[l];
+                l++;
+            }
+            max_rep = Math.max(max_rep, (r-l+1));
+            r++;
+        }
+        return max_rep;
     }
 
 
