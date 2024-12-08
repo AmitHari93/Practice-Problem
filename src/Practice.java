@@ -484,6 +484,69 @@ public class Practice {
         return max_rep;
     }
 
+    // Link list Problems
+
+    public int countNodesInLoop(ListNode head) {
+        // Add your code here.
+        ListNode slow=head, fast=head;
+        while(fast!=null && fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast){
+                int count = 1;
+                fast = fast.next;
+                while (slow != fast){
+                    count++;
+                    fast=fast.next;
+                }
+                return count;
+            }
+        }
+        return 0;
+    }
+
+
+    public ListNode sortList(ListNode head) {
+        if(head==null || head.next == null) return head;
+        ListNode middle = findMiddle(head);
+        ListNode left = head, right = middle.next;
+        middle.next=null;
+        left = sortList(left);
+        right = sortList(right);
+        return mergeLL(left, right);
+
+    }
+    public ListNode findMiddle(ListNode head){
+        if(head==null || head.next == null) return head;
+        ListNode slow = head, fast = head.next;
+        while(fast !=null && fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+    public ListNode mergeLL(ListNode list1, ListNode list2){
+        ListNode dummyNode = new ListNode(-1);
+        ListNode tmp = dummyNode;
+        while(list1!=null && list2 !=null){
+            if(list1.val <= list2.val){
+                tmp.next = list1;
+                list1 = list1.next;
+            }else{
+                tmp.next = list2;
+                list2 = list2.next;
+            }
+            tmp = tmp.next;
+        }
+
+        if(list1!=null){
+            tmp.next=list1;
+        }
+        if(list2!=null){
+            tmp.next = list2;
+        }
+        return dummyNode.next;
+    }
 
     public static void main(String[] args){
 //        patternDiamond(3);
