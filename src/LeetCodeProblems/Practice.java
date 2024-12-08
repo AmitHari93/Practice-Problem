@@ -1,6 +1,5 @@
-import java.net.SocketTimeoutException;
-import java.sql.Array;
-import java.sql.SQLOutput;
+package LeetCodeProblems;
+
 import java.util.*;
 
 public class Practice {
