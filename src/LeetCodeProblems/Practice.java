@@ -504,7 +504,6 @@ public class Practice {
         return 0;
     }
 
-
     public ListNode sortList(ListNode head) {
         if(head==null || head.next == null) return head;
         ListNode middle = findMiddle(head);
@@ -547,6 +546,240 @@ public class Practice {
         return dummyNode.next;
     }
 
+    // stack and Queue
+
+    public static boolean isValid(String s) {
+        int n = s.length();
+        Stack<Character> stack = new Stack<>();
+        for(int i=0; i<n; i++){
+            if(s.charAt(i) == '(' || s.charAt(i)== '{'|| s.charAt(i)== '['){
+                stack.push(s.charAt(i));
+            }else{
+                if(stack.isEmpty()) return false;
+                else if(s.charAt(i)==')' && stack.peek()=='(') stack.pop();
+                else if(s.charAt(i)=='}' && stack.peek()=='{') stack.pop();
+                else if(s.charAt(i)==']' && stack.peek()=='[') stack.pop();
+            }
+        }
+        return stack.isEmpty();
+    }
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> map = new HashMap<>();
+        Stack<Integer> s = new Stack<>();
+        int n = nums2.length;
+        for(int i=n-1; i>=0; i--){
+            if(s.isEmpty()){
+                map.put(nums2[i], -1);
+                s.push(nums2[i]);
+            }else{
+                while(!s.isEmpty() && s.peek() < nums2[i]){
+                    s.pop();
+                }
+                if(s.isEmpty()) map.put(nums2[i], -1);
+                else{
+                    map.put(nums2[i], s.peek());
+                    s.push(nums2[i]);
+                }
+            }
+
+        }
+        int[] ans = new int[nums1.length];
+        for(int i=0; i< ans.length; i++){
+            ans[i] = map.get(nums1[i]);
+        }
+        return ans;
+    }
+    public int[] nextGreaterElements(int[] nums) {
+        int n = nums.length;
+        int[] ans = new int[n];
+        Stack<Integer> s = new Stack<>();
+        for(int i=2*n-1; i>=0; i--){
+            while(!s.isEmpty() && s.peek() <= nums[i % n]){
+                s.pop();
+            }
+            if(i<n){
+                ans[i] = s.isEmpty() ? -1 : s.peek();
+            }
+            s.push(nums[i%n]);
+        }
+        return ans;
+
+    }
+    public int[] prevSmaller(int[] A) {
+        int n = A.length;
+        int[] ans = new int[n];
+        Stack<Integer> s = new Stack<>();
+
+        for(int i=0; i<n; i++){
+            while(!s.isEmpty() && s.peek() >= A[i]){
+                s.pop();
+            }
+            ans[i] = s.isEmpty() ? -1 : s.peek();
+            s.push(A[i]);
+        }
+        return ans;
+    }
+
+    public int sumSubarrayMinimum(int[] arr) {
+        int n = arr.length;
+        int[] left = previousSmallElement(arr);
+        int[] right = nextSmallElement(arr);
+        long sum = 0;
+        //int mod = 1000000007;
+        for(int i=0; i<n; i++){
+            int l = i- left[i];
+            int r = right[i] - i;
+            sum += (long) l * r  * arr[i];
+        }
+        return (int)sum;
+    }
+    public int[] previousSmallElement(int[] arr){
+        int n = arr.length;
+        int[] ans = new int[n];
+        Stack<Integer> s1 = new Stack<>();
+        for(int i=0; i<n; i++){
+            while(!s1.isEmpty() && arr[s1.peek()] > arr[i]){
+                s1.pop();
+            }
+            ans[i] = s1.isEmpty() ? -1 : s1.peek();
+            s1.push(i);
+        }
+        return ans;
+    }
+    public int[] nextSmallElement(int[] arr){
+        int n = arr.length;
+        int[] ans = new int[n];
+        Stack<Integer> s2 = new Stack<>();
+        for(int i=n-1; i>=0; i--){
+            while(!s2.isEmpty() && arr[s2.peek()] >= arr[i]){
+                s2.pop();
+            }
+            ans[i] = s2.isEmpty() ? n : s2.peek();
+            s2.push(i);
+        }
+        return ans;
+    }
+
+    public int[] asteroidCollision(int[] asteroids) {
+        Stack<Integer> s = new Stack<>();
+        for (int asteroid : asteroids) {
+            if (asteroid > 0) {
+                s.push(asteroid);
+            } else {
+                while(!s.isEmpty()){
+                    if(s.peek() == Math.abs(asteroid)) s.pop();
+                    else if (s.peek() < Math.abs(asteroid)) {
+                        s.pop();
+                        s.push(asteroid);
+                    }
+                }
+                s.push(asteroid);
+            }
+        }
+        int size = s.size();
+        int[] ans = new int[size];
+        for(int i=size-1; i>=0; i--){
+            ans[i] = s.pop();
+        }
+        return ans;
+    }
+
+    public long subArrayRanges(int[] nums) {
+        int minSum = sumSubarrayMinimum(nums);
+        int maxSum = sumSubarrayMaximum(nums);
+        return maxSum-minSum;
+    }
+    public int sumSubarrayMaximum(int[] nums){
+        int[] nge = nextGreaterElement(nums);
+        int[] pge = previousGreaterElement(nums);
+        long sum=0;
+        for(int i=0; i<nums.length; i++){
+            int l = i - pge[i];
+            int r = nge[i] -i;
+            sum += (long) l * r * nums[i];
+        }
+        return (int)sum;
+    }
+    public int[] nextGreaterElement(int[] nums){
+        Stack<Integer> s = new Stack<>();
+        int[] nge = new int[nums.length];
+        for(int i= nums.length-1; i>=0; i--){
+            while(!s.isEmpty() && s.peek() <= nums[i]){
+                s.pop();
+            }
+            nge[i] = s.isEmpty() ? nums.length : s.peek();
+            s.push(i);
+        }
+        return nge;
+    }
+    public int[] previousGreaterElement(int[] nums){
+        Stack<Integer> s = new Stack<>();
+        int[] pge = new int[nums.length];
+        for(int i=0; i<nums.length; i++){
+            while(!s.isEmpty() && s.peek() < nums[i]){
+                s.pop();
+            }
+            pge[i] = s.isEmpty() ? nums.length : s.peek();
+            s.push(i);
+        }
+        return pge;
+    }
+
+    public String removeKDigits(String num, int k) {
+        int removeDigits = k;
+        Stack<Character> s = new Stack<>();
+        for(int i=0; i<num.length(); i++){
+            while(removeDigits > 0 && !s.isEmpty() && s.peek()-'0' > num.charAt(i)-'0'){
+                removeDigits--;
+                s.pop();
+            }
+            s.push(num.charAt(i));
+        }
+        while(removeDigits > 0){
+            s.pop();
+            removeDigits--;
+        }
+        if(s.isEmpty()) return "0";
+        StringBuilder ans = new StringBuilder();
+        while(!s.isEmpty()){
+            ans.append(s.pop());
+        }
+        while(!ans.isEmpty() && ans.charAt(ans.length()-1)=='0'){
+            ans.setLength(ans.length()-1);
+        }
+        return ans.reverse().toString();
+    }
+
+    public int trap(int[] height) {
+        int n = height.length;
+        int[] pMax = prefixMax(height);
+        int[] sMax = suffixMax(height);
+        int sumOfWaterTrapped = 0;
+        for(int i=0; i<n; i++){
+            if(pMax[i] < height[i] && height[i] < sMax[i]){
+                sumOfWaterTrapped += Math.min(pMax[i], sMax[i]) - height[i];
+            }
+        }
+        return sumOfWaterTrapped;
+    }
+    public int[] prefixMax(int[] nums){
+        int[] preMax = new int[nums.length];
+        preMax[0] = nums[0];
+        for(int i=1; i< nums.length; i++){
+            preMax[i] = Math.max(preMax[i-1], nums[i]);
+        }
+        return preMax;
+    }
+
+    public int[] suffixMax(int[] nums){
+        int[] sufMax = new int[nums.length];
+        sufMax[nums.length-1] = nums[nums.length-1];
+        for(int i = nums.length-2; i >= 0; i--){
+            sufMax[i] = Math.max(sufMax[i+1], nums[i]);
+        }
+        return sufMax;
+    }
+
     public static void main(String[] args){
 //        patternDiamond(3);
 //        halfDiamond(5);
@@ -556,11 +789,11 @@ public class Practice {
 //            System.out.println(j);
 //        }
 //        prefix_sum(array);
-        String s ="abc";
-        char[] a = s.toCharArray();
-        char[] b = Arrays.copyOf(a, a.length);
-        Arrays.sort(b);
-        boolean q = Arrays.equals(a, b);
-        System.out.println(findInversionPair(array));
+//        String s ="abc";
+//        char[] a = s.toCharArray();
+//        char[] b = Arrays.copyOf(a, a.length);
+//        Arrays.sort(b);
+//        boolean q = Arrays.equals(a, b);
+//        System.out.println(findInversionPair(array));
     }
 }
