@@ -780,6 +780,135 @@ public class Practice {
         return sufMax;
     }
 
+    // Sliding window and two pointers
+
+    public int lengthOfLongestSubstring(String s) {
+        int n = s.length();
+        int l=0, r=0, max_length=0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        while(r < n){
+            if(map.containsKey(s.charAt(r)) && map.get(s.charAt(r)) >= l){
+                l = map.get(s.charAt(r)) + 1;
+                map.put(s.charAt(r), r);
+            }
+            max_length = Math.max(max_length, r-l+1);
+            map.put(s.charAt(r), r);
+            r++;
+        }
+        return max_length;
+    }
+    public int longestOnes(int[] nums, int k) {
+        int max_consecutive_one =0, l=0,r=0,count_0=0;
+        while(r < nums.length){
+            if(nums[r] == 0) count_0++;
+            while (count_0 > k){
+                if(nums[l]==0) count_0--;
+                l++;
+            }
+            max_consecutive_one = Math.max(r - l + 1, max_consecutive_one);
+            r++;
+        }
+        return max_consecutive_one;
+    }
+    public int characterReplacement(String s, int k) {
+        int n = s.length();
+        int[] map = new int[26];
+        int max_length=0, max_freq=0, l=0,r=0;
+        while(r < n){
+//            map.put(s.charAt(r), map.getOrDefault(s.charAt(r), 0) + 1);
+//            max_freq = Math.max(max_freq, map.get(s.charAt(r)));
+//            if((r-l+1) - max_freq > k){
+//                map.put(s.charAt(l), map.get(s.charAt(l)) - 1);
+//                l++;
+//            }
+            int ch = s.charAt(r) - 65;
+            map[ch]++;
+            max_freq = Math.max(max_freq, map[ch]);
+            if((r-l+1) - max_freq > k){
+                map[s.charAt(l)-65]--;
+                l++;
+            }
+            else{
+                max_length = Math.max(max_length, r-l+1);
+            }
+            r++;
+        }
+        return max_length;
+    }
+    public int numSubArraysWithSum(int[] nums, int goal) {
+        return numSubArrayWithSumLeseOrEqualK(nums, goal) - numSubArrayWithSumLeseOrEqualK(nums, goal-1);
+    }
+    public int numSubArrayWithSumLeseOrEqualK(int[] nums, int k){
+        int sum=0,l=0,r=0,noOfSubArrays=0;
+        while(r < nums.length){
+            sum += nums[r];
+            if(k < 0) return 0;
+            while(sum > k){
+                sum -= nums[l];
+                l++;
+            }
+            noOfSubArrays += r-l+1;
+            r++;
+        }
+        return noOfSubArrays;
+    }
+    public int numberOfSubArrays(int[] nums, int k) {
+        return numberOfSubArraysLessOrEqualK(nums, k) - numberOfSubArraysLessOrEqualK(nums, k-1);
+    }
+    public int numberOfSubArraysLessOrEqualK(int[] nums, int k) {
+        int noOfOdd=0, totalSubArrays=0, l=0,r=0;
+        if(k < 0) return 0;
+        while(r < nums.length){
+            noOfOdd += isOddNumber(nums[r]) ? 1 : 0;
+            while(noOfOdd > k){
+                noOfOdd -= isOddNumber(nums[l]) ? 1 : 0;
+                l++;
+            }
+            totalSubArrays += r-l+1;
+            r++;
+        }
+        return totalSubArrays;
+    }
+    public boolean isOddNumber(int number){
+        return number % 2 == 1;
+    }
+    public int numberOfSubstrings(String s) {
+        int r=0, noOfSubstring=0;
+        int[] hash = {-1, -1,-1};
+        while(r < s.length()){
+            int ch = s.charAt(r) - 'a';
+            hash[ch] = r;
+            if( hash[0] >= 0 && hash[1] >= 0 && hash[2] >= 0){
+                int minIndex = Math.min(Math.min(hash[0], hash[1]), hash[2]);
+                noOfSubstring += (minIndex + 1);
+            }
+            r++;
+        }
+        return noOfSubstring;
+    }
+    public int maxScore(int[] cardPoints, int k) {
+        int l=0,r=0,sum=0, totalPoints=0, maxSum=Integer.MIN_VALUE, window=0;
+        int n = cardPoints.length;
+        for(int cardPoint: cardPoints){
+            totalPoints += cardPoint;
+        }
+        if(n==k) return totalPoints;
+        while(r < n){
+            sum += cardPoints[r];
+            window++;
+            if(window == n-k) maxSum = Math.max(maxSum, totalPoints-sum);
+            else if (window > n-k) {
+                sum -= cardPoints[l];
+                window--;
+                l++;
+                maxSum = Math.max(maxSum, totalPoints-sum);
+            }
+            r++;
+        }
+        return maxSum;
+    }
+
+
     public static void main(String[] args){
 //        patternDiamond(3);
 //        halfDiamond(5);
