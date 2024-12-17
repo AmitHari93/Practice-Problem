@@ -908,6 +908,66 @@ public class Practice {
         return maxSum;
     }
 
+    // Heap and Priority Queues
+
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b-a);
+        for(int num: nums){
+            pq.add(num);
+        }
+        int f = k-1;
+        while(f > 0){
+            pq.remove();
+            f--;
+        }
+        return !pq.isEmpty() ? pq.peek() : -1;
+    }
+    public static int kthSmallest(int[] arr, int k) {
+        // Your code here
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for(int num: arr){
+            pq.add(num);
+        }
+        int f = k-1;
+        while(k > 0){
+            pq.remove();
+            f--;
+        }
+        return !pq.isEmpty() ? pq.peek() : -1;
+    }
+    public static ArrayList<Integer> mergeKArrays(int[][] arr, int K) {
+        // Write your code here.
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for(int i=0; i< K; i++){
+            for(int j=0; j < K; j++){
+                pq.add(arr[i][j]);
+            }
+        }
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(!pq.isEmpty()){
+            ans.add(pq.remove());
+        }
+        return ans;
+    }
+    public ListNode mergeKLists(ListNode[] lists) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for(ListNode node: lists){
+            while(node!= null){
+                pq.add(node.val);
+                node = node.next;
+            }
+        }
+        if(pq.isEmpty()){
+            return null;
+        }
+        ListNode head = new ListNode(pq.remove());
+        ListNode tmp = head;
+        while (!pq.isEmpty()){
+            tmp.next = new ListNode(pq.remove());
+            tmp = tmp.next;
+        }
+        return head;
+    }
 
     public static void main(String[] args){
 //        patternDiamond(3);
