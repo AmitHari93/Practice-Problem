@@ -969,6 +969,263 @@ public class Practice {
         return head;
     }
 
+    // Greedy Algorithm
+
+    public int findContentChildren(int[] g, int[] s) {
+        int l=0, r=0;
+        Arrays.sort(g);
+        Arrays.sort(s);
+        while(l < g.length && r < s.length){
+            if(g[l] <= s[r]){
+                l++;
+                r++;
+            } else if (g[l] > s[l]) {
+                r++;
+            }else{
+                l++;
+            }
+        }
+        return r;
+    }
+    public boolean lemonadeChange(int[] bills) {
+        int count_5 = 0, count_10=0, r=0;
+        while(r < bills.length){
+            if(bills[r] == 5) count_5++;
+            else{
+                 if (bills[r] == 10 && count_5 > 0) {
+                        count_5--;
+                        count_10++;
+                 }
+                 else if (bills[r] == 20 && count_5 > 0) {
+                     if (count_10 > 0) {
+                         count_10--;
+                         count_5--;
+                     }
+                     else if (count_5 >= 3) {
+                         count_5 -= 3;
+                     }else{
+                         return false;
+                     }
+                 }else{
+                     return false;
+                 }
+            }
+            r++;
+        }
+        return true;
+    }
+    public int minCoins(int coins[], int sum) {
+        // Your code goes here
+        Arrays.sort(coins);
+        int count_taken=0;
+        for(int i= coins.length-1; i >= 0; i--){
+            while (coins[i] <= sum){
+                count_taken++;
+                sum -= coins[i];
+            }
+        }
+        return sum > 0 ? -1 : count_taken;
+    }
+    double fractionalKnapsack(List<Integer> val, List<Integer> wt, int capacity) {
+        // code here
+        Item[] items = new Item[val.size()];
+        for(int i=0; i< val.size(); i++){
+            items[i] = new Item(val.get(i), wt.get(i));
+        }
+        return fractionalKnapsackSolution(items, capacity);
+    }
+    public double fractionalKnapsackSolution(Item items[], int capacity){
+        Arrays.sort(items, new ItemIterator());
+        double totalProfit = 0;
+        int currWeight = 0;
+        for(int i= 0; i < items.length; i++){
+            if(currWeight + items[i].weight <= capacity){
+                currWeight += items[i].weight;
+                totalProfit += items[i].value;
+            }else{
+                int remWeight = capacity - currWeight;
+                totalProfit += ((double) items[i].value / (double) items[i].weight) * (double) remWeight;
+                break;
+            }
+        }
+        return totalProfit;
+    }
+    public static boolean checkValidString(String s) {
+//        int left=0, right=0, star=0;
+//        for(int i=0; i< s.length(); i++){
+//            if(s.charAt(i)=='(') left++;
+//            else if (s.charAt(i)==')') {
+//                right++;
+//            }else{
+//                star++;
+//            }
+//        }
+//        System.out.println("left: "+ left + "right: " + right +  "star: "+ star);
+//        int diff = left > right ? left-right : right-left;
+//        if(left==right) return true;
+//        else return diff <= star;
+        int min =0, max=0;
+        for(int i=0; i< s.length(); i++){
+            if(s.charAt(i)=='('){
+                min += 1;
+                max += 1;
+            } else if (s.charAt(i)==')') {
+                min -= 1;
+                max -= 1;
+            }else{
+                min -= 1;
+                max += 1;
+            }
+            if(min < 0) min = 0;
+            if(max < 0) return false;
+        }
+        return min==0;
+    }
+    public boolean canJump(int[] nums) {
+        int n = nums.length;
+        if(n <= 1) return true;
+        int r = n-2, target = n-1;
+        while(r >= 0){
+            if(nums[r] >= target-r) target = r;
+            r--;
+        }
+        return target == 0;
+    }
+    public int jump(int[] nums) {
+        int l=0, r=0, countJumps=0, farthest;
+        while(r < nums.length-1){
+            farthest = 0;
+            for(int i=l; i<= r; i++){
+                farthest = Math.max(farthest, i+nums[i]);
+            }
+            l = r+1;
+            r = farthest;
+            countJumps++;
+        }
+        return countJumps;
+    }
+    public int maxMeetings(int start[], int end[]) {
+        // add your code here
+        ScheduleTime[] meetings = new ScheduleTime[start.length];
+        for(int i=0; i<start.length; i++){
+            meetings[i] = new ScheduleTime(start[i], end[i]);
+        }
+        Arrays.sort(meetings, new ScheduleIterator());
+        int noOfMeetings = 0, meetingEndTime = -1;
+        for (ScheduleTime meeting : meetings) {
+            if (meeting.start > meetingEndTime) {
+                noOfMeetings++;
+                meetingEndTime = meeting.end;
+            }
+        }
+        return noOfMeetings;
+    }
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        int row = intervals.length;
+        int l=0;
+        List<int[]> ans = new ArrayList<>();
+        while(l < row && intervals[l][1] < newInterval[0]){
+            ans.add(intervals[l]);
+            l++;
+        }
+        while(l < row && intervals[l][0] < newInterval[1]){
+            newInterval[0] = Math.min(intervals[l][0], newInterval[0]);
+            newInterval[1] = Math.max(intervals[l][1], newInterval[1]);
+            l++;
+        }
+        ans.add(newInterval);
+        while(l < row){
+            ans.add(intervals[l]);
+            l++;
+        }
+        return ans.toArray(new int[ans.size()][2]);
+    }
+    public int[][] merge(int[][] intervals) {
+        List<int[]> ans = new ArrayList<>();
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        int i=1, min = intervals[0][0], max = intervals[0][1];
+        while(i < intervals.length){
+            if(max >= intervals[i][0]){
+                max = Math.max(max, intervals[i][1]);
+            }else{
+                ans.add(new int[] {min, max});
+                min = intervals[i][0];
+                max = intervals[i][1];
+            }
+            i++;
+        }
+        ans.add(new int[] {min, max});
+        return ans.toArray(new int[0][]);
+    }
+    public int eraseOverlapIntervals(int[][] intervals) {
+        int size = intervals.length;
+        return size - findMaximumNonOverLappingIntervals(intervals);
+    }
+    public int findMaximumNonOverLappingIntervals(int[][] intervals){
+        ScheduleTime[] meetings  = new ScheduleTime[intervals.length];
+        for(int i=0; i< intervals.length; i++){
+            meetings[i] = new ScheduleTime(intervals[i][0], intervals[i][1]);
+        }
+        //Arrays.sort(meetings, new ScheduleIterator());
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[1]));
+        int noOfNonOverlapping  = 1, r=1, endTime = intervals[0][1];
+        while(r < intervals.length){
+            if(intervals[r][0] > endTime){
+                noOfNonOverlapping++;
+                endTime = intervals[r][1];
+            }
+            r++;
+        }
+        return noOfNonOverlapping;
+    }
+    static int findPlatform(int arr[], int dep[]) {
+        // add your code here
+        Arrays.sort(arr);
+        Arrays.sort(dep);
+        int i=1,j=0, platformReq=1, ans=1;
+        while(i < arr.length && j < dep.length){
+            if(arr[i] <= dep[j]){
+                platformReq++;
+                i++;
+            } else if (arr[i] > dep[j]) {
+                platformReq--;
+                j++;
+            }
+            if(platformReq > ans) ans = platformReq;
+        }
+        return ans;
+
+    }
+    public ArrayList<Integer> JobSequencing(int[] id, int[] deadline, int[] profit) {
+        // code here..
+        ArrayList<Integer> ans = new ArrayList<>();
+        int maxDeadLine = Integer.MIN_VALUE;
+        Job[] jobs = new Job[deadline.length];
+        for(int i=0; i< deadline.length; i++){
+            jobs[i] = new Job(id[i], profit[i], deadline[i]);
+            maxDeadLine = Math.max(maxDeadLine, deadline[i]);
+        }
+        int[] arr = new int[maxDeadLine + 1];
+        Arrays.sort(jobs, new JobsComparator());
+        for(int i=0; i< maxDeadLine+1; i++){
+            arr[i] = -1;
+        }
+        int r=0, totalProfit=0, countJobs=0;
+        while(r < jobs.length){
+            for(int j = jobs[r].deadline; j>=1; j--){
+                if(arr[j]==-1){
+                    totalProfit += jobs[r].profit;
+                    countJobs++;
+                    break;
+                }
+            }
+            r++;
+        }
+        ans.add(countJobs);
+        ans.add(totalProfit);
+        return ans;
+    }
+
     public static void main(String[] args){
 //        patternDiamond(3);
 //        halfDiamond(5);
