@@ -1,5 +1,6 @@
 package LeetCodeProblems;
 
+import java.security.cert.CollectionCertStoreParameters;
 import java.util.*;
 
 public class Practice {
@@ -1226,11 +1227,183 @@ public class Practice {
         return ans;
     }
 
+    // Strings Problems
+
+    public String reverseWords(String s) {
+        int l=0, r = s.length();
+        String ans = "", res = "";
+        while( l < r){
+            if(s.charAt(l) != ' '){
+                res += s.charAt(l);
+            } else if (s.charAt(l) == ' ') {
+                if(!ans.equals("")){
+                    ans = res + " " + ans;
+                }else{
+                    ans = res;
+                }
+                res = "";
+            }
+            l++;
+        }
+        if(!res.equals("")){
+            if(!ans.equals("")){
+                ans = res + " " + ans;
+            }else{
+                ans = res;
+            }
+        }
+        return ans;
+    }
+    public String largestOddNumber(String num) {
+//        int n = num.length();
+//        int l=0, r=n-1;
+//        while(r >=0){
+//            if((int) num.charAt(r) % 2 == 1) break;
+//            r--;
+//        }
+//        String ans = "";
+//        while(l <= r){
+//            ans += num.charAt(l);
+//            l++;
+//        }
+//        return ans;
+        int max = -1;
+        max = Math.max(max, num.lastIndexOf('1'));
+        max = Math.max(max, num.lastIndexOf('3'));
+        max = Math.max(max, num.lastIndexOf('5'));
+        max = Math.max(max, num.lastIndexOf('7'));
+        max = Math.max(max, num.lastIndexOf('9'));
+        if(max==-1) return "";
+        return num.substring(0, max+1);
+    }
+    public String longestCommonPrefix(String[] strs) {
+        int n = strs.length;
+        String toMatch = strs[0];
+        for(int m=1; m < n; m++){
+            String s = strs[m];
+            int l=0, match = 0;
+            while(l < s.length() && l < toMatch.length()){
+                if(toMatch.charAt(l) == s.charAt(l)){
+                    match++;
+                }else {
+                    break;
+                }
+                l++;
+            }
+            if(match > 0) toMatch = toMatch.substring(0, match);
+            else{
+                return "";
+            }
+        }
+        return toMatch;
+    }
+    public boolean isIsomorphic(String s, String t) {
+        int[] map1 = new int[200];
+        int[] map2 = new int[200];
+        for(int i=0; i< s.length(); i++){
+            if(map1[s.charAt(i)] != map2[t.charAt(i)]) return false;
+            map1[s.charAt(i)] = i+1;
+            map2[t.charAt(i)] = i+1;
+        }
+        return true;
+    }
+    public boolean rotateString(String s, String goal) {
+        if(s.length() != goal.length()) return false;
+        s = s+goal;
+        int l=0, n = goal.length();
+        for(int i=0; i< goal.length(); i++){
+            String subString = s.substring(l, n);
+            if(subString.equals(goal)) return true;
+            l++;
+            n++;
+        }
+        return false;
+    }
+    public boolean isAnagram(String s, String t) {
+        if(s.length() != t.length()) return false;
+        int[] freq = new int[26];
+        for(int i=0; i< s.length(); i++){
+            freq[s.charAt(i) - 'a']++;
+        }
+        for(int i=0; i< t.length(); i++){
+            freq[t.charAt(i) - 'a']--;
+        }
+        for(int j=0; j< 26; j++){
+            if(freq[j] != 0) return false;
+        }
+        return true;
+    }
+    public String frequencySort(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        for(int i=0; i<s.length(); i++){
+            map.put(s.charAt(i), map.getOrDefault(s.charAt(i), 0) + 1);
+        }
+        List<Map.Entry<Character, Integer>> list = new LinkedList<>(map.entrySet());
+        list.sort((o1, o2) -> Integer.compare(o2.getValue(), o1.getValue()));
+        StringBuilder ans = new StringBuilder();
+        for (Map.Entry<Character, Integer> characterIntegerEntry : list) {
+            int l = characterIntegerEntry.getValue();
+            Character c = characterIntegerEntry.getKey();
+            while (l > 0) {
+                ans.append(c);
+                l--;
+            }
+        }
+        return ans.toString();
+    }
+    public int romanToInt(String s) {
+        int n = s.length();
+        Map<Character, Integer> map = new HashMap<>();
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
+        int sum = map.get(s.charAt(n-1));
+        char lastSeen = s.charAt(n-1);
+        if(n==1) return sum;
+        for(int i = n-2; i>=0; i--){
+            if(map.get(s.charAt(i)) >= map.get(lastSeen)){
+                sum += map.get(s.charAt(i));
+            }else {
+                sum -= map.get(s.charAt(i));
+            }
+            lastSeen = s.charAt(i);
+        }
+        return sum;
+    }
+    public int maxDepth(String s) {
+        Stack<Character> sk = new Stack<>();
+        int max = 0;
+        for(int i=0; i< s.length(); i++){
+            if(s.charAt(i)=='('){
+                sk.push(s.charAt(i));
+            } else if (s.charAt(i)==')') {
+                max = Math.max(max, sk.size());
+                sk.pop();
+            }
+        }
+        return max;
+    }
+    public int minAddToMakeValid(String s) {
+        Stack<Character> sk = new Stack<>();
+        for(int i=0; i<s.length(); i++){
+            if(sk.isEmpty()) sk.push(s.charAt(i));
+             else if (s.charAt(i)== ')' && sk.peek()=='(') {
+                sk.pop();
+            }
+            sk.push(s.charAt(i));
+        }
+        return sk.size();
+    }
+
     public static void main(String[] args){
 //        patternDiamond(3);
 //        halfDiamond(5);
 //        pattern_8(4);
-        int[] array = {1,0,1,1,0,0,0,1};
+//        int[] array = {1,0,1,1,0,0,0,1};
 //        for (int j : array) {
 //            System.out.println(j);
 //        }
