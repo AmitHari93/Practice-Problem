@@ -212,6 +212,37 @@ public class Practice {
         return max_inversion;
     }
 
+    public int maxProduct(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        int n = nums.length, prefix=1, suffix=1;
+        for(int i=0; i< n; i++){
+            if(prefix==0) prefix = 1;
+            if(suffix == 0) suffix = 1;
+            prefix = prefix * nums[i];
+            suffix = suffix * nums[n-i-1];
+            max = Math.max(max, Math.max(prefix, suffix));
+        }
+        return max;
+    }
+    public List<List<Integer>> generatePascalsTriangle(int numRows) {
+        List<List<Integer>> ans = new ArrayList<>();
+        for(int i=1; i<= numRows; i++){
+            ans.add(generateNthRowValues(i));
+        }
+        return ans;
+    }
+    public static List<Integer> generateNthRowValues(int row){
+        List<Integer> ans = new ArrayList<>();
+        ans.add(1);
+        long res = 1;
+        for(int col = 1; col < row; col++){
+            res = res * (row - col);
+            res = res/col;
+            ans.add((int)res);
+        }
+        return ans;
+    }
+
     // Binary search problem
 
     public int[] rearrangeArray(int[] nums) {
@@ -1399,7 +1430,117 @@ public class Practice {
         return sk.size();
     }
 
+    // Recursion Problems
+
+    public double myPow(double x, int n) {
+        long k = n;
+        double ans = 1.0;
+        if(k < 0) k = -1 * k;
+        while(k > 0){
+            if(k % 2 == 1){
+                ans = ans * 2;
+                k --;
+            }else{
+                x = x * x;
+                k = k /2;
+            }
+        }
+        if( n < 0) return 1.0 /ans;
+        return ans;
+
+    }
+    static void reverse(Stack<Integer> s) {
+        // add your code here
+        Queue<Integer> q = new LinkedList<>();
+        reverseStack(q, s);
+        while(!q.isEmpty()){
+            s.push(q.poll());
+        }
+    }
+    public static void reverseStack(Queue<Integer> q, Stack<Integer> s){
+        if(s.isEmpty()) return;
+        q.add(s.pop());
+        reverseStack(q, s);
+    }
+    public Stack<Integer> sort(Stack<Integer> s) {
+        // add code here.
+        List<Integer> arr = new ArrayList<>();
+        getElement(arr, s);
+        arr.sort((a,b)->b-a);
+        for(int i=arr.size()-1; i >=0; i--){
+            s.push(arr.get(i));
+        }
+        return s;
+    }
+    public void getElement(List<Integer> ans, Stack<Integer> s){
+        if(s.isEmpty()) return;
+        ans.add(s.pop());
+        getElement(ans, s);
+    }
+    public int countGoodNumbers(long n) {
+        long mod = 1000000007;
+        long even = (n+1) / 2;
+        long odd = n / 2;
+        long a = powX(5, even, mod);
+        long b = powX(4, odd, mod);
+        return (int) (a * b % mod);
+    }
+    public long powX(long x, long n, long M){
+        double ans = 1.0;
+        while(n > 0){
+            if(n%2==1){
+                ans = ans * x % M;
+                n--;
+            }else{
+                x = x*x % M;
+                n = n/2;
+            }
+        }
+        return (long) ans % M;
+    }
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> ans  = new ArrayList<>();
+        findCombinations(0, target, candidates, ans, new ArrayList<>());
+        return ans;
+    }
+    public void findCombinations(int index, int target, int[] arr, List<List<Integer>> ans, List<Integer> ds){
+        if(index == arr.length){
+            if(target == 0){
+                ans.add(new ArrayList<>(ds));
+            }
+            return;
+        }
+        if(arr[index] <= target){
+            //pick the index element
+            ds.add(arr[index]);
+            findCombinations(index, target-arr[index], arr, ans, ds);
+            ds.remove(ds.size()-1);
+        }
+        // not picking the index element
+        findCombinations(index + 1, target, arr, ans, ds);
+    }
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> ans = new ArrayList<>();
+        Arrays.sort(candidates);
+        findCombinationsWithoutRepeat(0, target, candidates, ans, new ArrayList<>());
+        return ans;
+    }
+    public void findCombinationsWithoutRepeat(int index, int target, int[] arr, List<List<Integer>> ans, List<Integer> ds){
+        if(target==0){
+            ans.add(new ArrayList<>(ds));
+            return;
+        }
+        for(int i=index; i < arr.length; i++){
+            if(i > index && arr[i] == arr[i-1]) continue;
+            if(arr[i] > target) break;
+            ds.add(arr[i]);
+            findCombinationsWithoutRepeat(i+1, target-arr[i], arr, ans, ds);
+            ds.remove(ds.size()-1);
+        }
+    }
+
     public static void main(String[] args){
+        System.out.println(generateNthRowValues(1));
 //        patternDiamond(3);
 //        halfDiamond(5);
 //        pattern_8(4);
