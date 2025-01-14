@@ -1,6 +1,5 @@
 package LeetCodeProblems;
 
-import java.security.cert.CollectionCertStoreParameters;
 import java.util.*;
 
 public class Practice {
@@ -1539,8 +1538,354 @@ public class Practice {
         }
     }
 
+        // Binary Tree
+
+    // using 1 stack
+    public List<Integer> postorderTraversal(TreeNode root) {
+        Stack<TreeNode> s = new Stack<>();
+        List<Integer> ans = new ArrayList<>();
+        if(root==null) return ans;
+        TreeNode curr = root;
+        TreeNode tmp;
+        while(!s.isEmpty() || curr != null){
+            if(curr != null){
+                s.push(curr);
+                curr = curr.left;
+            }else{
+                tmp = s.peek().right;
+                if(tmp == null){
+                    tmp = s.peek();
+                    ans.add(s.pop().val);
+                    while(!s.isEmpty() && tmp == s.peek().right){
+                        tmp = s.peek();
+                        s.pop();
+                        ans.add(tmp.val);
+                    }
+                }else{
+                    curr = tmp;
+                }
+            }
+        }
+        return ans;
+    }
+
+    //pre post in order by using one traversal only
+    public static void prePostInOrderByOneTraversalOnly(TreeNode root){
+        Stack<PairNode> sk = new Stack<>();
+        List<Integer> preOrder = new ArrayList<>();
+        List<Integer> inOrder = new ArrayList<>();
+        List<Integer> postOrder = new ArrayList<>();
+        sk.push(new PairNode(1, root));
+        while(!sk.isEmpty()){
+            PairNode pn = sk.pop();
+            if(pn.nodeVal==1){
+                preOrder.add(pn.node.val);
+                pn.nodeVal++;
+                sk.push(pn);
+                if(pn.node.left!= null){
+                    sk.push(new PairNode(1, pn.node.left));
+                }
+
+            } else if (pn.nodeVal==2) {
+                inOrder.add(pn.node.val);
+                pn.nodeVal++;
+                sk.push(pn);
+                if(pn.node.right != null){
+                    sk.push(new PairNode(1, pn.node.right));
+                }
+
+            }else{
+                postOrder.add(pn.node.val);
+            }
+        }
+        System.out.println(preOrder);
+        System.out.println(inOrder);
+        System.out.println(postOrder);
+    }
+    public int diameterOfBinaryTree(TreeNode root) {
+        int[] diameter = {1};
+        getMaxHeight(root, diameter);
+        return diameter[0];
+    }
+    public int getMaxHeight(TreeNode node, int[] diameter){
+        if(node==null) return 0;
+        int left_height = getMaxHeight(node.left, diameter);
+        int right_height = getMaxHeight(node.right, diameter);
+        diameter[0] = Math.max(diameter[0], left_height+right_height);
+        return Math.max(left_height, right_height) + 1;
+    }
+    public int maxPathSum(TreeNode root) {
+        int[] pathSum = {Integer.MIN_VALUE};
+        getMaxPathSum(root, pathSum);
+        return pathSum[0];
+    }
+    public int getMaxPathSum(TreeNode node, int[] sum){
+        if(node==null) return 0;
+        int leftSum = Math.max(0, getMaxPathSum(node.left, sum));
+        int rightSum = Math.max(0, getMaxPathSum(node.right, sum));
+        sum[0] = Math.max(sum[0], leftSum+rightSum+node.val);
+        return node.val + Math.max(leftSum, rightSum);
+    }
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p==null && q==null) return true;
+        if(p==null || q==null) return false;
+        return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if(root==null) return ans;
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        boolean leftToRight = true;
+        while(!q.isEmpty()){
+            int size = q.size();
+            List<Integer> row = new ArrayList<>();
+            for(int i=0; i<size; i++){
+                TreeNode node = q.poll();
+                if(node.left!=null){
+                    q.add(node.left);
+                }
+                if(node.right!=null){
+                    q.add(node.right);
+                }
+            }
+            if(!leftToRight){
+                Collections.reverse(row);
+            }
+            leftToRight = !leftToRight;
+            ans.add(row);
+        }
+        return ans;
+    }
+    public static List<Integer> getBoundary(TreeNode root){
+        List<Integer> ans = new ArrayList<>();
+        ans.add(root.val);
+        getLeftBoundary(root, ans);
+        getLeafNode(root, ans);
+        getRightBoundary(root, ans);
+        return ans;
+    }
+    public static void getLeftBoundary(TreeNode node, List<Integer> list){
+        TreeNode curr = node.left;
+        while(curr != null){
+            if(!isLeaf(curr)){
+                list.add(curr.val);
+            }
+            if(curr.left != null) curr = curr.left;
+            else curr = curr.right;
+        }
+    }
+    public static void getRightBoundary(TreeNode node, List<Integer> list){
+        TreeNode curr = node.right;
+        List<Integer> l = new ArrayList<>();
+        while(curr != null){
+            if(!isLeaf(curr)) l.add(curr.val);
+            if(curr.right != null) curr = curr.right;
+            else curr = curr.left;
+        }
+        for(int i=l.size()-1; i>=0; i--){
+            list.add(l.get(i));
+        }
+    }
+    public static void getLeafNode(TreeNode node, List<Integer> list){
+        if(isLeaf(node)) list.add(node.val);
+        if(node.left != null) getLeafNode(node.left, list);
+        if(node.right != null) getLeafNode(node.right, list);
+    }
+    public static boolean isLeaf(TreeNode node){
+        return node.left == null && node.right == null;
+    }
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if(root==null) return ans;
+        Queue<NodeView> q = new LinkedList<>();
+        TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> map = new TreeMap<>();
+        q.add(new NodeView(root));
+        while(!q.isEmpty()){
+            int size = q.size();
+            for(int i=0; i< size; i++){
+                NodeView nv = q.poll();
+                int x = nv.vertical;
+                int y = nv.level;
+                if(!map.containsKey(x)) map.put(x, new TreeMap<>());
+                if(!map.get(x).containsKey(y)) map.get(x).put(y, new PriorityQueue<>());
+                map.get(x).get(y).add(nv.node.val);
+                if(nv.node.left!=null){
+                    q.add(new NodeView(x-1, y+1, nv.node.left));
+                }
+                if(nv.node.right != null){
+                    q.add(new NodeView(x+1, y+1, nv.node.right));
+                }
+            }
+        }
+        for(TreeMap<Integer, PriorityQueue<Integer>> m: map.values()){
+            List<Integer> list = new ArrayList<>();
+            for(PriorityQueue<Integer> pq: m.values()){
+                while(!pq.isEmpty()){
+                    list.add(pq.poll());
+                }
+            }
+            ans.add(list);
+        }
+        return ans;
+    }
+    public static List<Integer> rightSideView(TreeNode root) {
+        Queue<TreeNode> q = new LinkedList<>();
+        List<Integer> ans = new ArrayList<>();
+        if(root==null) return ans;
+        q.add(root);
+        while(!q.isEmpty()){
+            int size = q.size();
+            List<Integer> level = new ArrayList<>();
+            for(int i=0; i<size; i++){
+                TreeNode node = q.poll();
+                level.add(node.val);
+                if(node.right!=null) q.add(node.right);
+                if(node.left!=null) q.add(node.left);
+            }
+            ans.add(level.get(0));
+        }
+        return ans;
+    }
+    public ArrayList <Integer> bottomView(TreeNode root) {
+        // Code here
+        ArrayList<Integer> ans = new ArrayList<>();
+        Map<Integer, Integer> map = new TreeMap<>();
+        Queue<PairNode> q = new LinkedList<>();
+        if(root==null) return ans;
+        q.add(new PairNode(0, root));
+        while(!q.isEmpty()){
+            int size = q.size();
+            for(int i=0; i<size; i++){
+                PairNode pn = q.poll();
+                map.put(pn.nodeVal, pn.node.val);
+                if(pn.node.left!=null) q.add(new PairNode(pn.nodeVal-1, pn.node.left));
+                if(pn.node.right!=null) q.add(new PairNode(pn.nodeVal+1, pn.node.right));
+            }
+        }
+        for(Map.Entry<Integer, Integer> m : map.entrySet()){
+            ans.add(m.getValue());
+        }
+        return ans;
+    }
+    public boolean isSymmetric(TreeNode root) {
+        return root == null || isHSymmetric(root.left, root.right);
+    }
+    public boolean isHSymmetric(TreeNode leftNode, TreeNode rightNode){
+        if(leftNode==null || rightNode==null) return leftNode==rightNode;
+        if(leftNode.val != rightNode.val) return false;
+        return isHSymmetric(leftNode.left, rightNode.right) && isHSymmetric(leftNode.right, rightNode.left);
+    }
+    
+    // Binary Search Tree
+    public TreeNode bstFromPreorder(int[] preorder) {
+        return bstFromPreorder(preorder,Integer.MAX_VALUE, new int[]{0});
+    }
+    public TreeNode bstFromPreorder(int[] preorder, int upperBound, int[] i){
+        if(i[0]==preorder.length || preorder[i[0]] > upperBound) return null;
+        TreeNode node = new TreeNode(preorder[i[0]++]);
+        node.left = bstFromPreorder(preorder, node.val, i);
+        node.right = bstFromPreorder(preorder, upperBound, i);
+        return node;
+    }
+    public boolean findTarget (TreeNode root, int k) {
+        List<Integer> inorder = new ArrayList<>();
+        findInorder(root, inorder);
+        int r = inorder.size()-1;
+        int l = 0;
+        while( l < r){
+            if(inorder.get(l)+inorder.get(r) == k){
+                return true;
+            } else if (inorder.get(l)+inorder.get(r) < k) {
+                l++;
+            }else{
+                r--;
+            }
+        }
+        return false;
+    }
+    public void findInorder(TreeNode node, List<Integer> ans){
+        if(node==null) return;
+        findInorder(node.left, ans);
+        ans.add(node.val);
+        findInorder(node.right, ans);
+    }
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p){
+        TreeNode successor = null;
+        while(root != null){
+            if(p.val >= root.val) root = root.right;
+            else{
+                successor = root;
+                root  = root.left;
+            }
+        }
+        return successor;
+    }
+    public TreeNode inorderPredecessor(TreeNode root, TreeNode p){
+        TreeNode predecessor = null;
+        while(root != null){
+            if(p.val <= root.val) root = root.left;
+            else{
+                predecessor = root;
+                root = root.right;
+            }
+        }
+        return predecessor;
+    }
+    public boolean findTargetBST(TreeNode root, int k) {
+        Stack<TreeNode> inorderNextStack = new Stack<>();
+        Stack<TreeNode> inorderPreviousStack = new Stack<>();
+        pushAllLeft(root, inorderNextStack);
+        pushAllRight(root, inorderPreviousStack);
+        int l=getInorderNext(inorderNextStack), r=getInorderPrevious(inorderPreviousStack);
+        while(l < r){
+            if(l+r == k) return true;
+            else if (l+r < k) {
+                l = getInorderNext(inorderNextStack);
+            }else{
+                r = getInorderPrevious(inorderPreviousStack);
+            }
+        }
+        return false;
+    }
+    public void pushAllLeft(TreeNode node, Stack<TreeNode> s){
+        while(node!=null){
+            s.push(node);
+            node = node.left;
+        }
+    }
+    public void pushAllRight(TreeNode node, Stack<TreeNode> s){
+        while(node!=null){
+            s.push(node);
+            node = node.right;
+        }
+    }
+    public int getInorderNext(Stack<TreeNode> s){
+        TreeNode next = s.pop();
+        if(next.right!=null){
+            pushAllLeft(next.right, s);
+        }
+        return next.val;
+    }
+    public int getInorderPrevious(Stack<TreeNode> s){
+        TreeNode prev = s.pop();
+        if(prev.left!=null){
+            pushAllRight(prev.left, s);
+        }
+        return prev.val;
+    }
+
     public static void main(String[] args){
-        System.out.println(generateNthRowValues(1));
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+        root.left.right.left = new TreeNode(7);
+        root.left.right.right = new TreeNode(8);
+        System.out.println(rightSideView(root));
+//        prePostInOrderByOneTraversalOnly(root);
+//        System.out.println(generateNthRowValues(1));
 //        patternDiamond(3);
 //        halfDiamond(5);
 //        pattern_8(4);
