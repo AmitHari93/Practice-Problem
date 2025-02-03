@@ -1,6 +1,10 @@
 package LeetCodeProblems;
 
+import com.sun.jdi.ArrayReference;
+
+import javax.management.InstanceNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Practice {
 
@@ -1875,15 +1879,1035 @@ public class Practice {
         return prev.val;
     }
 
+    // Graph Problems
+    public List<List<Integer>> printGraph(int V, int edges[][]) {
+        List<List<Integer>> ans  = new ArrayList<>();
+        for(int i=0; i<V; i++){
+            ans.add(new ArrayList<>());
+        }
+        for(int[] edge: edges){
+            ans.get(edge[0]).add(edge[1]);
+            ans.get(edge[1]).add(edge[0]);
+        }
+        return ans;
+    }
+    public ArrayList<Integer> bfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) {
+        // code here
+        ArrayList<Integer> ans = new ArrayList<>();
+        int[] visited = new int[V];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(0);
+        visited[0] = 1;
+        int m;
+        while(!queue.isEmpty()){
+            m = queue.poll();
+            ArrayList<Integer> k = adj.get(m);
+            for(int e: k){
+                if(visited[e]==0){
+                    queue.add(e);
+                    visited[e]=1;
+                }
+            }
+            ans.add(m);
+        }
+        return ans;
+    }
+    public ArrayList<Integer> dfsOfGraph(ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        ArrayList<Integer> ans = new ArrayList<>();
+        int[] visited = new int[adj.size()];
+        dfs(0, ans, visited, adj);
+        return ans;
+    }
+    public void dfs(int element, ArrayList<Integer> ans, int[] visited, ArrayList<ArrayList<Integer>> adj){
+        visited[element] = 1;
+        ans.add(element);
+        for(int it: adj.get(element)){
+            if(visited[it] == 0){
+                dfs(it, ans, visited, adj);
+            }
+        }
+    }
+    public int findCircleNum(int[][] isConnected) {
+        int v = isConnected.length;
+//        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+//        for(int i=0; i<v+1; i++){
+//            adj.add(new ArrayList<>());
+//        }
+//        for(int i=0; i<isConnected.length; i++){
+//            for(int j=0; j<isConnected[0].length; j++){
+//                if(isConnected[i][j]==1 && i!=j){
+//                    adj.get(i+1).add(j+1);
+//                }
+//            }
+//        }
+        boolean[] visited = new boolean[v];
+        int connectedComponent = 0;
+        for(int i=0; i<isConnected.length; i++){
+            if(!visited[i]){
+                dfs(i, isConnected, visited);
+                connectedComponent++;
+            }
+        }
+        return connectedComponent;
+    }
+    public void dfs(int e, int[][] isConnected, boolean[] visited){
+        visited[e]=true;
+        for(int i=0; i<isConnected.length; i++){
+            if(isConnected[e][0]==1 && !visited[i]){
+                dfs(i, isConnected, visited);
+            }
+        }
+    }
+    public int orangesRotting(int[][] grid) {
+        Queue<Pair> q = new LinkedList<>();
+        int maxTime = Integer.MIN_VALUE;
+        int n = grid.length;
+        int m = grid[0].length;
+        int row,col,time,cnt=0;
+        int[][] visited = new int[n][m];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(grid[i][j]==2){
+                    q.add(new Pair(i, j, 0));
+                    visited[i][j] = 2;
+                }else{
+                    visited[i][j] = 0;
+                }
+                if(grid[i][j]==1) cnt++;
+            }
+        }
+        int[] delRow = {-1, 0, 1, 0};
+        int[] delCol = {0, 1, 0, -1};
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            time = p.time;
+            maxTime = Math.max(maxTime, time);
+            for(int k=0; k<4; k++){
+                row = p.row  + delRow[k];
+                col = p.col + delCol[k];
+                if(row >= 0 && row <n && col >=0 && col < m && visited[row][col] !=2 && grid[row][col]==1){
+                    q.add(new Pair(row, col, time + 1));
+                    visited[row][col]=2;
+                    cnt--;
+                }
+            }
+        }
+//        for(int i=0; i<n; i++){
+//            for(int j=0; j<m; j++){
+//                if(visited[i][j] != 2 && grid[i][j]==1){
+//                    return -1;
+//                }
+//            }
+//        }
+        if(cnt!=0) return -1;
+        return maxTime;
+    }
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int[] delRow = {-1, 0, 1, 0};
+        int[] delCol = {0, 1, 0, -1};
+        int n = image.length, m = image[0].length;
+        boolean[][] visited = new boolean[n][m];
+        int initialColor = image[sr][sc];
+        int row, col;
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(sr, sc, 0));
+        image[sr][sc] = color;
+        visited[sr][sc] = true;
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            for(int i=0; i<4; i++){
+                row = p.row + delRow[i];
+                col = p.col + delCol[i];
+                if(row >=0 && row < n && col >=0 && col < m && image[row][col]==initialColor && !visited[row][col]){
+                    q.add(new Pair(row, col, 0));
+                    image[row][col]=color;
+                    visited[row][col] = true;
+                }
+            }
+        }
+        return image;
+    }
+    public boolean isCycle(ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+//        int v = adj.size();
+//        boolean isCycle = false;
+//        boolean[] visited = new boolean[v];
+//        Queue<Integer> q = new LinkedList<>();
+//        for(int vertex=0; vertex < v; vertex++){
+//            if(!visited[vertex] && !isCycle){
+//                isCycle = bfsCycle(vertex, adj, visited, q);
+//            }
+//        }
+//        return isCycle;
+        int V = adj.size();
+        boolean[] visited = new boolean[V];
+        for(int i=0; i<V; i++){
+            if(!visited[i]){
+                if(bfsCycle(i, visited, adj)) return true;
+            }
+        }
+        return false;
+    }
+    public boolean bfsCycle(int i, boolean[] visited, ArrayList<ArrayList<Integer>> adj){
+        Queue<Node> q = new LinkedList<>();
+        q.add(new Node(i, -1));
+        while(!q.isEmpty()){
+            Node n = q.poll();
+            int node = n.first;
+            int parent = n.second;
+            for(int adjacentNode: adj.get(node)){
+                if(!visited[adjacentNode]){
+                    q.add(new Node(adjacentNode, parent));
+                    visited[adjacentNode]=true;
+                }
+                else if (parent != adjacentNode) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean bfsCycle(int i, ArrayList<ArrayList<Integer>> adj, boolean[] visited, Queue<Integer> q){
+        q.add(i);
+        while(!q.isEmpty()){
+             int p = q.poll();
+            if(visited[p]) return true;
+            visited[p] = true;
+            for(int k: adj.get(p)){
+                if(!visited[k]){
+                    q.add(k);
+                }
+            }
+        }
+        return false;
+    }
+    public int[][] updateMatrix(int[][] mat) {
+        int m = mat.length, n = mat[0].length, dRow,dCol;
+        boolean[][] visited = new boolean[m][n];
+        int[][] distanceMatrix = new int[m][n];
+        Queue<Pair> q = new LinkedList<>();
+        int[] delRow = {-1, 0, 1, 0};
+        int[] delCol = {0, 1, 0, -1};
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(mat[i][j]==0){
+                    q.add(new Pair(i, j, 0));
+                    visited[i][j] = true;
+                }
+            }
+        }
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            distanceMatrix[p.row][p.col] = p.time;
+            for(int k=0; k < 4; k++){
+                dRow = p.row + delRow[k];
+                dCol = p.col + delCol[k];
+                if(dRow >=0 && dRow < m && dCol >=0 && dCol < n && !visited[dRow][dCol]){
+                    q.add(new Pair(dRow, dCol, p.time + 1));
+                    visited[dRow][dCol]=true;
+                }
+            }
+        }
+        return distanceMatrix;
+
+    }
+    public void solve(char[][] board) {
+        int m = board.length, n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int[] delRow = {-1, 0, 1, 0};
+        int[] delCol = {0, 1, 0, -1};
+//        for(int i=0; i<m; i++){
+//            for(int j=0; j<n; j++){
+//                if((i==0 || i==m-1) && board[i][j] == 'O' && !visited[i][j]){
+//                    dfs(i, j, visited, board, delRow, delCol);
+//                } else if ((j==0 || j==n-1) && board[i][j] == 'O' && !visited[i][j]) {
+//                    dfs(i, j, visited, board, delRow, delCol);
+//                }
+//            }
+//        }
+        for(int i=0; i<n; i++){
+            if(board[0][i]=='O' && !visited[0][i]){
+                dfs(0, i, visited, board, delRow, delCol);
+            }
+            if(board[m-1][i]=='O' && !visited[m-1][i]){
+                dfs(m-1, i, visited, board, delRow, delCol);
+            }
+        }
+        for(int j=0; j<n; j++){
+            if(board[j][0]=='O' && !visited[j][0]){
+                dfs(j, 0, visited, board, delRow, delCol);
+            }
+            if(board[j][n-1] == 'O' && !visited[j][n-1]){
+                dfs(j, n-1, visited, board, delRow, delCol);
+            }
+        }
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(!visited[i][j] && board[i][j]=='O'){
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+    public void dfs(int i, int j, boolean[][] visited, char[][] board, int[] delRow, int[] delCol){
+        visited[i][j]=true;
+        for(int k=0; k<4; k++){
+            int row = i + delRow[k];
+            int col = j + delCol[k];
+            if(row>=0 && row < board.length && col >=0 && col < board[0].length && board[i][j]=='O' && !visited[row][col]){
+                dfs(row, col, visited, board, delRow, delCol);
+            }
+        }
+    }
+    public int numIslands(char[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        int[] delRow = {-1, 0, 1, 0};
+        int[] delCol = {0, 1, 0, -1};
+        boolean[][] visited = new boolean[m][n];
+        int noOfIslands = 0;
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j]=='1' && !visited[i][j]){
+                    noOfIslands++;
+                    dfsTraverse(i, j, visited, grid,delRow, delCol);
+                }
+            }
+        }
+        return noOfIslands;
+    }
+    public void dfsTraverse(int row, int col, boolean[][] visited, char[][] grid, int[] delRow, int[] delCol){
+        visited[row][col] = true;
+        for(int k=0; k<4; k++){
+            int nRow = row + delRow[k];
+            int nCol = col + delCol[k];
+            if(nRow >=0 && nRow < grid.length && nCol >=0 && nCol < grid[0].length && !visited[nRow][nCol] && grid[nRow][nCol]=='1'){
+                dfsTraverse(nRow, nCol, visited, grid, delRow, delCol);
+            }
+        }
+    }
+    public int numProvinces(ArrayList<ArrayList<Integer>> adj, int V) {
+        // code here
+        int v = adj.size();
+        boolean[] vis = new boolean[v];
+        int noOfComponent=0;
+//        Queue<Integer> q = new LinkedList<>();
+//        for(int i=0; i< v; i++){
+//            if(!vis[i+1]){
+//                noOfComponent++;
+//                bfsT(i+1, q, adj, vis);
+//            }
+//        }
+        for(int i=0; i<v; i++){
+            if(!vis[i]){
+                noOfComponent++;
+                dfs(i, vis, adj);
+            }
+        }
+        return noOfComponent;
+    }
+    public void dfs(int i, boolean[] vis, ArrayList<ArrayList<Integer>> adj){
+        vis[i]=true;
+        for(int j=0; j< adj.get(i).size(); j++){
+            if(adj.get(i).get(j)==1 && !vis[j]){
+                dfs(j, vis, adj);
+            }
+        }
+    }
+    public void bfsT(int i, Queue<Integer> q, ArrayList<ArrayList<Integer>> adj, boolean[] vis){
+        q.add(i);
+        while(!q.isEmpty()){
+            int e = q.poll();
+            vis[e]=true;
+            for(int k: adj.get(e)){
+                if(k==1 && !vis[k] && k!=e){
+                    q.add(k);
+                }
+            }
+        }
+    }
+    public boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        int[] color = new int[n];
+        Arrays.fill(color, -1);
+        for(int i=0; i<n; i++){
+            if(color[i]==-1){
+                if(!dfsColor(i, 0, color, graph)) return false;
+            }
+        }
+        return true;
+    }
+    public boolean dfsColor(int e, int col, int[] color, int[][] graph){
+        color[e] = col;
+        for(int it: graph[e]){
+            if(color[it]==-1){
+                if(!dfsColor(it, 1 - col, color, graph)) return false;
+            } else if (color[it] == col) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean isCyclicDirectedGraph(int V, ArrayList<ArrayList<Integer>> adj) {
+        // code here
+        boolean[] visited = new boolean[V];
+        int[] path = new int[V];
+        for(int i=0; i<V; i++){
+            if(!visited[i]){
+                if(dfsDirectedCycle(i, visited, path, adj)) return true;
+            }
+
+        }
+        return false;
+    }
+    public boolean dfsDirectedCycle(int node, boolean[] visited, int[] path, ArrayList<ArrayList<Integer>> adj){
+        visited[node]=true;
+        path[node] = 1;
+        for(int adjNode: adj.get(node)){
+            if(!visited[adjNode]){
+                if(dfsDirectedCycle(adjNode, visited, path, adj)) return true;
+            }
+            else if (path[adjNode]==1) {
+                return true;
+            }
+        }
+        path[node]=0;
+        return false;
+    }
+    public ArrayList<Integer> topologicalSort(ArrayList<ArrayList<Integer>> adj) {
+        // Your code here
+        int v = adj.size();
+        boolean[] visited = new boolean[v];
+        Stack<Integer> s = new Stack<>();
+        for(int i=0; i<v; i++){
+            if(!visited[i]){
+                dfsTopological(i, visited, adj, s);
+            }
+        }
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(!s.isEmpty()){
+            ans.add(s.pop());
+        }
+        return ans;
+    }
+    public void dfsTopological(int node, boolean[] visited, ArrayList<ArrayList<Integer>> adj, Stack<Integer> s){
+        visited[node]=true;
+        for(int adjNode: adj.get(node)){
+            if(!visited[adjNode]){
+                dfsTopological(adjNode, visited, adj, s);
+            }
+        }
+        s.push(node);
+    }
+        // using kahn's algorithm using queue and in degree method
+    public ArrayList<Integer> topologicalSortKahnAlgo(ArrayList<ArrayList<Integer>> adj) {
+        // Your code here
+        int v = adj.size();
+        int[] inDegree = new int[v];
+        Queue<Integer> q = new LinkedList<>();
+        for(int i=0; i<v; i++){
+            for(int adjNode: adj.get(i)){
+                inDegree[adjNode]++;
+            }
+        }
+        for(int i=0; i<v; i++){
+            if(inDegree[i]==0){
+                q.add(i);
+            }
+        }
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(!q.isEmpty()){
+            int k = q.poll();
+            ans.add(k);
+            for(int it: adj.get(k)){
+                inDegree[it]--;
+                if(inDegree[it]==0) q.add(it);
+            }
+        }
+        return ans;
+    }
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[] path = new int[numCourses];
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for(int i=0; i<numCourses; i++){
+            adj.add(new ArrayList<>());
+        }
+        for (int[] prerequisite : prerequisites) {
+            adj.get(prerequisite[0]).add(prerequisite[1]);
+        }
+        boolean[] visited = new boolean[numCourses];
+        for(int i=0; i<numCourses; i++){
+            if(!visited[i]){
+                if(dfsDirectedGraphCycle(i, visited, path, adj)) return true;
+            }
+        }
+        return false;
+    }
+    public boolean dfsDirectedGraphCycle(int node, boolean[] visited, int[] path, ArrayList<ArrayList<Integer>> adj){
+        visited[node] = true;
+        path[node]=1;
+        for(int adjNode: adj.get(node)){
+            if(!visited[adjNode]){
+                if(dfsDirectedGraphCycle(adjNode, visited, path, adj)) return true;
+            }
+            else if (path[adjNode]==1) {
+                return true;
+            }
+        }
+        path[node]=0;
+        return false;
+    }
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for(int i=0; i<numCourses; i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int[] pre: prerequisites){
+            adj.get(pre[1]).add(pre[0]);
+        }
+        int[] inDegree = new int[numCourses];
+        for(int i=0; i<numCourses; i++){
+            for(int adjNode: adj.get(i)){
+                inDegree[adjNode]++;
+            }
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i=0; i<numCourses; i++){
+            if(inDegree[i]==0) queue.add(i);
+        }
+        int i=0;
+        int[] ans = new int[numCourses];
+        while(!queue.isEmpty()){
+            int k = queue.poll();
+            for(int it: adj.get(k)){
+                inDegree[it]--;
+                if(inDegree[it]==0) queue.add(it);
+            }
+            ans[i++] = k;
+        }
+        if(i == numCourses){
+            return ans;
+        }else{
+            return new int[]{};
+        }
+    }
+    // solve prob if you have not done any prob on a day: 802. Find Eventual Safe States:: https://leetcode.com/problems/find-eventual-safe-states/description/
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        // reverse all the edges to use topological order in terms of inDegree fun
+        int m = graph.length;
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for(int i=0; i<m; i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int i=0 ;i<m; i++){
+            for(int j=0; j<graph[i].length; j++){
+                adj.get(graph[i][j]).add(i);
+            }
+        }
+        int[] inDegree = new int[m];
+        for(int i=0; i<m; i++){
+            for(int node: adj.get(i)){
+                inDegree[node]++;
+            }
+        }
+        List<Integer> ans = new ArrayList<>();
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i=0; i<m; i++){
+            if(inDegree[i]==0) queue.add(i);
+        }
+        while(!queue.isEmpty()){
+            int node = queue.poll();
+            ans.add(node);
+            for(int adjNode: adj.get(node)){
+                inDegree[adjNode]--;
+                if(inDegree[adjNode]==0) queue.add(adjNode);
+            }
+        }
+        Collections.sort(ans);
+        return ans;
+    }
+    public int[] shortestPath(ArrayList<ArrayList<Integer>> adj, int src) {
+        // code here
+        int[] dis = new int[adj.size()];
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        Queue<Integer> q = new LinkedList<>();
+        q.add(src);
+        dis[src]=0;
+        bfsMinDis(adj,dis, q);
+        for(int i=0; i<dis.length; i++){
+            if(dis[i]==Integer.MAX_VALUE) dis[i]=-1;
+        }
+        return dis;
+    }
+    public void bfsMinDis(ArrayList<ArrayList<Integer>> adj, int[]  dis, Queue<Integer> q){
+        while(!q.isEmpty()){
+            int node = q.poll();
+            for(int adjNode: adj.get(node)){
+                if(dis[node]+1 < dis[adjNode]){
+                    q.add(adjNode);
+                    dis[adjNode] = dis[node]+1;
+                }
+            }
+        }
+    }
+    public int[] shortestPath(int V, int E, int[][] edges) {
+        // Code here
+        ArrayList<ArrayList<Node>> adj = new ArrayList<>();
+        for(int i=0; i<V; i++){
+            adj.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            adj.get(edge[0]).add(new Node(edge[1], edge[2]));
+        }
+        int[] dis = new int[V];
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        int src = 0;
+        dis[src]=0;
+        Queue<Node> q = new LinkedList<>();
+        q.add(new Node(0, 0));
+        while(!q.isEmpty()){
+            Node n = q.poll();
+            int currNode = n.first;
+            int currNodeDistance = n.second;
+            for(Node node: adj.get(currNode)){
+                int adjNode = node.first;
+                int adjNodeDistance = node.second;
+                if(currNodeDistance + adjNodeDistance < dis[adjNode]){
+                    dis[adjNode] = currNodeDistance + adjNodeDistance;
+                    q.add(new Node(adjNode, dis[adjNode]));
+                }
+            }
+        }
+        for(int i=0; i<V; i++){
+            if(dis[i]==Integer.MAX_VALUE) dis[i]=-1;
+        }
+        return dis;
+    }
+    public int[] shortestPathUsingTopologicalSort(int V, int E, int[][] edges){
+        ArrayList<ArrayList<Node>> adj = new ArrayList<>();
+        for(int i=0; i<V; i++){
+            adj.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            adj.get(edge[0]).add(new Node(edge[1], edge[2]));
+        }
+        int[] dis = new int[V];
+        boolean[] visited = new boolean[V];
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        int src = 0;
+        dis[src]=0;
+        Stack<Node> s = new Stack<>();
+        for(int i=0; i<V; i++) {
+            if(!visited[i]){
+                dfsTOPO(new Node(i, 0), visited, adj, s);
+            }
+        }
+        while(!s.isEmpty()){
+            Node currNode = s.pop();
+            for(Node adjNode: adj.get(currNode.first)){
+                if(dis[currNode.first] + adjNode.second < dis[adjNode.first]){
+                    dis[adjNode.first] = dis[currNode.first] + adjNode.second;
+                }
+            }
+        }
+        for(int i=0; i<V; i++){
+            if(dis[i]==Integer.MAX_VALUE) dis[i]=-1;
+        }
+        return dis;
+    }
+    public void dfsTOPO(Node node, boolean[] visited, ArrayList<ArrayList<Node>> adj, Stack<Node> s){
+        visited[node.first]=true;
+        for(Node n: adj.get(node.first)){
+            if(!visited[n.first]) {
+                dfsTOPO(n, visited, adj, s);
+            }
+        }
+        s.push(node);
+    }
+    ArrayList<Integer> dijkstra(ArrayList<ArrayList<Node>> adj, int src) {
+        // Write your code here
+        int v = adj.size();
+        Integer[] dis = new Integer[v];
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        dis[src]=0;
+//        Queue<Node> queue = new LinkedList<>();
+        PriorityQueue<Node> queue = new PriorityQueue<>(Comparator.comparingInt(x -> x.second));
+        queue.add(new Node(src, 0));
+        while(!queue.isEmpty()){
+            Node n = queue.poll();
+            int currNode = n.first;
+
+            for(Node node: adj.get(currNode)){
+                int adjNode = node.first;
+                int adjNodeDis = node.second;
+                if(dis[currNode] + adjNodeDis < dis[adjNode]){
+                    dis[adjNode] = dis[currNode] + adjNodeDis;
+                    queue.add(node);
+                }
+            }
+        }
+        ArrayList<Integer> ans = new ArrayList<>();
+        Collections.addAll(ans, dis);
+        return ans;
+    }
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int n = grid.length;
+        int[][] dis = new int[n][n];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                dis[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        // all 8 directional call for bfs
+        int[] delRow = {-1, -1, -1, 0, 1, 1, 1, 0};
+        int[] delCol = {-1, 0, 1, 1, 1, 0, -1, -1};
+        Queue<Pair> queue = new LinkedList<>();
+        if(grid[0][0]==1) return -1;
+        queue.add(new Pair(0, 0, 0));
+        dis[0][0] = 1;
+        while(!queue.isEmpty()){
+            Pair p = queue.poll();
+            int row = p.row;
+            int col = p.col;
+            for(int k=0; k<8; k++){
+                int nRow = row + delRow[k];
+                int nCol = col + delCol[k];
+                if(row == grid.length -1 && col == grid.length - 1){
+                    return dis[row][col];
+                }
+                if(nRow >= 0 && nRow < grid.length && nCol >= 0 && nCol <grid.length && grid[nRow][nCol]==0){
+                    if (dis[row][col] + 1 < dis[nRow][nCol]) {
+                        dis[nRow][nCol] = dis[row][col] + 1;
+                        queue.add(new Pair(nRow, nCol, dis[nRow][nCol]));
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    public void bfsShortestPath(int row, int col, int[] dis, boolean[][] visited, int[][] grid, int[] delRow, int[] delCol){
+        visited[row][col]=true;
+        dis[0] += 1;
+        for(int i=0; i<3; i++){
+            int r = row + delRow[i];
+            int c = col + delCol[i];
+            if(grid[r][c] == 0 && !visited[r][c]){
+                bfsShortestPath(r, c, dis, visited, grid, delRow, delCol);
+            }
+        }
+    }
+    public int minimumEffortPath(int[][] heights) {
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        int m = heights.length;
+        int n = heights[0].length;
+        int[][] dis = new int[m][n];
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                dis[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        PriorityQueue<IPair> pq = new PriorityQueue<>(Comparator.comparingInt(x -> x.dis));
+        pq.add(new IPair(0, 0, 0));
+        int[] delRow = {-1, 0, 1, 0};
+        int[] delCol = {0, 1, 0, -1};
+        dis[0][0] = 0;
+        while(!pq.isEmpty()){
+            IPair currNode = pq.poll();
+            int row = currNode.row;
+            int col = currNode.col;
+            if(row==m-1 && col==n-1) return dis[row][col];
+//            int currNodeDis = currNode.dis;
+            for(int k=0; k<4; k++){
+                int adjRow = row + delRow[k];
+                int adjCol = col + delCol[k];
+                if(adjRow >=0 && adjRow <m && adjCol >=0 && adjCol<n){
+                    int absDis = Math.abs(heights[row][col] - heights[adjRow][adjCol]);
+                    if(Math.max(dis[row][col], absDis) < dis[adjRow][adjCol]){
+                        dis[adjRow][adjCol] = Math.max(dis[row][col], absDis);
+                        pq.add(new IPair(dis[adjRow][adjCol], adjRow, adjCol));
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    public static int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        ArrayList<ArrayList<Node>> adj = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int i=0; i<flights.length; i++){
+            adj.get(flights[i][0]).add(new Node(flights[i][1], flights[i][2]));
+        }
+        System.out.println(adj.get(0));
+        int[] dis = new int[n];
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        dis[src] = 0;
+        Queue<Pair> queue = new LinkedList<>();
+        queue.add(new Pair(src, 0, 0));
+        while(!queue.isEmpty()){
+            Pair node = queue.poll();
+            int currNode = node.row;
+            int cost = node.col;
+            int stop = node.time;
+            if(stop > k) continue;
+            for(Node it: adj.get(currNode)){
+                int  adjNode = it.first;
+                int adjNodeDis = it.second;
+                if(cost + adjNodeDis < dis[adjNode]){
+                    dis[adjNode] = cost + adjNodeDis;
+                    queue.add(new Pair(adjNode, dis[adjNode], stop+1));
+                }
+            }
+        }
+        if(dis[dst]==Integer.MAX_VALUE) return -1;
+        return dis[dst];
+    }
+    public int networkDelayTime(int[][] times, int n, int k) {
+        ArrayList<ArrayList<Node>> adj = new ArrayList<>();
+        for(int i=0; i<n+1; i++){
+            adj.add(new ArrayList<>());
+        }
+        for (int[] time : times) {
+            adj.get(time[0]).add(new Node(time[1], time[2]));
+        }
+        int[] dis = new int[n];
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        dis[k] = 0;
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(x->x.second));
+        pq.add(new Node(k, 0));
+        while(!pq.isEmpty()){
+            Node node = pq.poll();
+            int currNode = node.first;
+            int currNodeWt = node.second;
+
+            for(Node it: adj.get(currNode)){
+                int adjNode = it.first;
+                int adjNodeWt = it.second;
+
+                if(currNodeWt + adjNodeWt < dis[adjNode]){
+                    dis[adjNode] = currNodeWt + adjNodeWt;
+                    pq.add(new Node(adjNode, currNodeWt + adjNodeWt));
+                }
+            }
+        }
+
+        int ans = Integer.MIN_VALUE;
+        for(int i=0; i<n; i++){
+            if(dis[i]==Integer.MAX_VALUE) return -1;
+            ans = Math.max(ans, dis[i]);
+        }
+        return ans;
+    }
+    public static int countPaths(int n, int[][] roads) {
+        long[] dis = new long[n];
+        Arrays.fill(dis, Long.MAX_VALUE);
+        long[] ways = new long[n];
+        Arrays.fill(ways, 0);
+        ArrayList<ArrayList<NodeL>> adj = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int[] edges: roads){
+            adj.get(edges[0]).add(new NodeL(edges[1], edges[2]));
+            adj.get(edges[1]).add(new NodeL(edges[0], edges[2]));
+        }
+        PriorityQueue<NodeL> pq = new PriorityQueue<>(Comparator.comparingLong(x->x.second));
+        pq.add(new NodeL(0, 0));
+        dis[0]=0;
+        ways[0]=1;
+        long M = (long) 1e9+7;
+        while(!pq.isEmpty()){
+            NodeL node = pq.poll();
+            long currNode = node.first;
+            long time = node.second;
+
+            for(NodeL it: adj.get((int)currNode)){
+                long adjNode = it.first;
+                long adjNodeTime = it.second;
+
+                if(time + adjNodeTime < dis[(int)adjNode]){
+                    dis[(int)adjNode] = time + adjNodeTime;
+                    pq.add(new NodeL(adjNode, dis[(int)adjNode]));
+                    ways[(int)adjNode] = ways[(int)currNode];
+                } else if (time + adjNodeTime == dis[(int)adjNode]) {
+                    ways[(int)adjNode] = (ways[(int)currNode] + ways[(int)adjNode]) % M;
+                }
+            }
+        }
+
+        return (int) (ways[n-1] % M);
+    }
+    int minimumMultiplications(int[] arr, int start, int end) {
+        // Your code here
+        int[] mul = new int[100000];
+        Arrays.fill(mul, Integer.MAX_VALUE);
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(new Node(start, 0));
+        mul[0]=0;
+        int mode = (int) 1e5;
+        while(!queue.isEmpty()){
+            Node node = queue.poll();
+            int curr = node.first;
+            int currNodeMul = node.second;
+
+            for(int it: arr){
+                int result = (it * curr) % mode;
+                if(currNodeMul + 1  < mul[result]){
+                    mul[result] = currNodeMul + 1;
+                    if(result == end) return mul[result];
+                    queue.add(new Node(result, currNodeMul+1));
+                }
+            }
+        }
+        return -1;
+    }
+
+    // if the graph has -ve wt djisktras will fail that will solve by bellmanFord
+
+    static int[] bellmanFord(int V, int[][] edges, int src) {
+        // Write your code here
+        int[] dis = new int[V];
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        dis[src]=0;
+        for(int i=0; i<V-1; i++){
+            for(int[] ed: edges){
+                int u = ed[0];
+                int v = ed[1];
+                int wt = ed[2];
+                // relaxing the edges
+                if(dis[u] != Integer.MAX_VALUE && dis[u] + wt < dis[v]){
+                    dis[v] = dis[u] + wt;
+                }
+            }
+        }
+        // checking if further relaxation is possible
+        for(int[] edge: edges){
+            int node = edge[0];
+            int adjNode = edge[1];
+            int wt = edge[2];
+            // relaxing the edges
+            if(dis[node] != Integer.MAX_VALUE && dis[node] + wt < dis[adjNode]){
+                return new int[]{-1};
+            }
+        }
+        return dis;
+    }
+
+    // Floyd Warshall for all pair nodes
+    public void shortestDistance(int[][] mat) {
+        // Code here
+        int n = mat.length;
+//        int[][] wtMatrix = new int[n][n];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(mat[i][j]==-1){
+                    mat[i][j] = (int) 1e4;
+                }
+//                wtMatrix[i][j] = mat[i][j];
+            }
+        }
+
+        for(int via=0; via<n; via++){
+            for(int i=0; i<n; i++){
+                for(int j=0; j<n; j++){
+                    mat[i][j] = Math.min(mat[i][j], mat[i][via] + mat[via][j]);
+//                    if(i==j && wtMatrix[i][j] < 0) return
+                }
+            }
+        }
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(mat[i][j]== (int) 1e4){
+                    mat[i][j] = -1;
+                }
+//                wtMatrix[i][j] = mat[i][j];
+            }
+        }
+
+    }
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        int[][] wtMatrix  = new int[n][n];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                wtMatrix[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        for (int[] edge : edges) {
+            wtMatrix[edge[0]][edge[1]] = edge[2];
+            wtMatrix[edge[1]][edge[0]] = edge[2];
+        }
+        for(int i=0; i<n; i++){
+            wtMatrix[i][i]=0;
+        }
+        for(int via=0; via < n; via++){
+            for(int i=0; i<n; i++){
+                for(int j=0; j<n; j++){
+                    if(wtMatrix[i][via]==Integer.MAX_VALUE || wtMatrix[via][j] == Integer.MAX_VALUE) continue;
+                    wtMatrix[i][j] = Math.min(
+                            wtMatrix[i][j], wtMatrix[i][via] + wtMatrix[via][j]);
+                }
+            }
+        }
+        int  min = n;
+        int city = -1;
+        for(int i=0; i<n; i++){
+            int count=0;
+            for(int j=0; j<n; j++){
+                if(wtMatrix[i][j] != 0 && wtMatrix[i][j] <= distanceThreshold){
+                    count++;
+                }
+            }
+            if(count <= min){
+                min = count;
+                city = i;
+            }
+
+        }
+        return city;
+    }
+    static int spanningTree(int V, int E, List<List<int[]>> adj) {
+        // Code Here.
+        PriorityQueue<IPair> pq = new PriorityQueue<>(Comparator.comparingInt(x->x.dis));
+        boolean[] visited = new boolean[V];
+        int spanningTreeWt=0;
+        ArrayList<ArrayList<Integer>> STE = new ArrayList<>();
+        pq.add(new IPair(0, 0, -1));
+
+        while(!pq.isEmpty()){
+            IPair p = pq.poll();
+            int wt = p.dis;
+            int node = p.row;
+            int parent = p.col;
+            if(!visited[node]){
+                spanningTreeWt += wt;
+//                STE.add(new ArrayList<>())
+                visited[node]=true;
+                for(int[] edges: adj.get(node)){
+                    int adjNode = edges[0];
+                    int weight = edges[1];
+                    if(!visited[adjNode]){
+                        pq.add(new IPair(weight, adjNode, parent));
+                    }
+                }
+            }
+        }
+        return spanningTreeWt;
+    }
+
     public static void main(String[] args){
-        TreeNode root = new TreeNode(1);
-        root.left = new TreeNode(2);
-        root.right = new TreeNode(3);
-        root.left.left = new TreeNode(4);
-        root.left.right = new TreeNode(5);
-        root.left.right.left = new TreeNode(7);
-        root.left.right.right = new TreeNode(8);
-        System.out.println(rightSideView(root));
+//        TreeNode root = new TreeNode(1);
+//        root.left = new TreeNode(2);
+//        root.right = new TreeNode(3);
+//        root.left.left = new TreeNode(4);
+//        root.left.right = new TreeNode(5);
+//        root.left.right.left = new TreeNode(7);
+//        root.left.right.right = new TreeNode(8);
+//        System.out.println(rightSideView(root));
+//        int[][] flights = {{1,2,10},{2,0,7},{1,3,8},{4,0,10},{3,4,2},{4,2,10},{0,3,3},{3,1,6},{2,4,5}};
+//        int[][] flights = {{0,1,100},{1,2,100},{0,2,500}};
+//        int[][] flights = {{1,0,10}};
+//        System.out.println(countPaths(2, flights));
 //        prePostInOrderByOneTraversalOnly(root);
 //        System.out.println(generateNthRowValues(1));
 //        patternDiamond(3);
