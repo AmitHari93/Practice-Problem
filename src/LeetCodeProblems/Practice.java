@@ -2,7 +2,6 @@ package LeetCodeProblems;
 
 import com.sun.jdi.ArrayReference;
 
-import javax.management.InstanceNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -180,7 +179,6 @@ public class Practice {
         if(ans != -1) System.out.println(ans);
         else System.out.println("No");
     }
-
     public static int findInversionPair(int[] arr){
         int count_0 = 0 , count_1 = 0;
         int inversion_pair = 0;
@@ -194,7 +192,6 @@ public class Practice {
         System.out.println("count_0: "+count_0 + " count_1: " +count_1 + " total inversion: "+ inversion_pair);
         return getMaxInversion(arr, inversion_pair, count_0);
     }
-
     private static int getMaxInversion(int[] arr, int inversion_pair, int count_0) {
         int max_inversion = inversion_pair;
         int one = 0;
@@ -214,7 +211,6 @@ public class Practice {
         }
         return max_inversion;
     }
-
     public int maxProduct(int[] nums) {
         int max = Integer.MIN_VALUE;
         int n = nums.length, prefix=1, suffix=1;
@@ -247,7 +243,6 @@ public class Practice {
     }
 
     // Binary search problem
-
     public int[] rearrangeArray(int[] nums) {
         int n = nums.length;
         List<Integer> positive = new ArrayList<>();
@@ -284,7 +279,6 @@ public class Practice {
         }
         return max_len;
     }
-
     public int longestConsecutive(int[] nums) {
         int max_length = 0, count_length=1;
         int n = nums.length;
@@ -299,7 +293,6 @@ public class Practice {
         max_length = Math.max(max_length, count_length);
         return max_length;
     }
-
     public List<Integer> majorityElement(int[] nums) {
         int count_1=0, count_2=0, el_1=Integer.MIN_VALUE,el_2=0;
         List<Integer> ans = new ArrayList<>();
@@ -327,7 +320,6 @@ public class Practice {
         if(count_2 > res) ans.add(el_2);
         return ans;
     }
-
     public int findPeakElement(int[] nums) {
         int n = nums.length;
         if(n==1) return 0;
@@ -347,7 +339,6 @@ public class Practice {
         }
         return -1;
     }
-
     public List<Integer> findPeaks(int[] mountain) {
         int n = mountain.length;
         List<Integer> ans = new ArrayList<>();
@@ -356,7 +347,6 @@ public class Practice {
         }
         return ans;
     }
-
     public int countHillValley(int[] nums) {
         int n = nums.length;
         int hill=0, valley=0;
@@ -385,7 +375,6 @@ public class Practice {
         }
         return hill+valley;
     }
-
     public int minDays(int[] bloomDay, int m, int k) {
         int totalFlowers = m*k;
         int size = bloomDay.length;
@@ -419,7 +408,6 @@ public class Practice {
         bouguets += (count/pair);
         return bouguets;
     }
-
     public int findKthPositive(int[] arr, int k) {
         int n = arr.length;
         int l = 0, h=n-1;
@@ -451,7 +439,6 @@ public class Practice {
         }
         return false;
     }
-
     int floorSqrt(int n) {
         // Your code here
         int l=1, h = n/2;
@@ -501,7 +488,6 @@ public class Practice {
         }
         return ans;
     }
-
     public int maxFrequency(int[] nums, int k) {
         int n = nums.length;
         Arrays.sort(nums);
@@ -519,7 +505,6 @@ public class Practice {
     }
 
     // Link list Problems
-
     public int countNodesInLoop(ListNode head) {
         // Add your code here.
         ListNode slow=head, fast=head;
@@ -538,7 +523,6 @@ public class Practice {
         }
         return 0;
     }
-
     public ListNode sortList(ListNode head) {
         if(head==null || head.next == null) return head;
         ListNode middle = findMiddle(head);
@@ -582,7 +566,6 @@ public class Practice {
     }
 
     // stack and Queue
-
     public static boolean isValid(String s) {
         int n = s.length();
         Stack<Character> stack = new Stack<>();
@@ -654,7 +637,6 @@ public class Practice {
         }
         return ans;
     }
-
     public int sumSubarrayMinimum(int[] arr) {
         int n = arr.length;
         int[] left = previousSmallElement(arr);
@@ -694,7 +676,6 @@ public class Practice {
         }
         return ans;
     }
-
     public int[] asteroidCollision(int[] asteroids) {
         Stack<Integer> s = new Stack<>();
         for (int asteroid : asteroids) {
@@ -718,7 +699,6 @@ public class Practice {
         }
         return ans;
     }
-
     public long subArrayRanges(int[] nums) {
         int minSum = sumSubarrayMinimum(nums);
         int maxSum = sumSubarrayMaximum(nums);
@@ -759,7 +739,6 @@ public class Practice {
         }
         return pge;
     }
-
     public String removeKDigits(String num, int k) {
         int removeDigits = k;
         Stack<Character> s = new Stack<>();
@@ -784,7 +763,6 @@ public class Practice {
         }
         return ans.reverse().toString();
     }
-
     public int trap(int[] height) {
         int n = height.length;
         int[] pMax = prefixMax(height);
@@ -805,7 +783,6 @@ public class Practice {
         }
         return preMax;
     }
-
     public int[] suffixMax(int[] nums){
         int[] sufMax = new int[nums.length];
         sufMax[nums.length-1] = nums[nums.length-1];
@@ -816,7 +793,6 @@ public class Practice {
     }
 
     // Sliding window and two pointers
-
     public int lengthOfLongestSubstring(String s) {
         int n = s.length();
         int l=0, r=0, max_length=0;
@@ -944,7 +920,6 @@ public class Practice {
     }
 
     // Heap and Priority Queues
-
     public int findKthLargest(int[] nums, int k) {
         PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b-a);
         for(int num: nums){
@@ -1005,7 +980,6 @@ public class Practice {
     }
 
     // Greedy Algorithm
-
     public int findContentChildren(int[] g, int[] s) {
         int l=0, r=0;
         Arrays.sort(g);
@@ -1262,7 +1236,6 @@ public class Practice {
     }
 
     // Strings Problems
-
     public String reverseWords(String s) {
         int l=0, r = s.length();
         String ans = "", res = "";
@@ -1432,9 +1405,21 @@ public class Practice {
         }
         return sk.size();
     }
+    public static String replaceWords(String sentence, Map<String, String> library) {
+        Map<String, String> map = new HashMap<>();
+        map.put("quick", "fast");
+        map.put("brown", "black");
+        map.put("lazy", "sleepy");
+        String[] words = sentence.split(" ");
+        StringBuilder result = new StringBuilder();
+
+        for (String word : words) {
+            result.append(map.getOrDefault(word, word)).append(" ");
+        }
+        return result.toString().trim();
+    }
 
     // Recursion Problems
-
     public double myPow(double x, int n) {
         long k = n;
         double ans = 1.0;
@@ -1542,8 +1527,331 @@ public class Practice {
         }
     }
 
-        // Binary Tree
+    public int perfectSum(int[] nums, int target) {
+        // code here
+        // needs optimization with dp
+        return getTarget(0, 0, nums, target);
 
+    }
+    public int getTarget(int index, int sum, int[] arr, int target){
+        if(sum > target) return 0;
+        if(index == arr.length){
+            if(sum == target){
+                return 1;
+            }
+            return 0;
+        }
+        sum += arr[index];
+        int l = getTarget(index+1, sum, arr, target);
+
+        sum -= arr[index];
+        int r = getTarget(index+1, sum, arr, target);
+        return l+r;
+    }
+    public static boolean isSubsetPresent(int n, int k,int []a) {
+        // Write your code here
+        return findTarget(0,0,k,a);
+
+    }
+    public static boolean findTarget(int index, int sum, int target, int[] arr){
+        if(sum > target) return false;
+        if(index == arr.length){
+            return sum == target;
+        }
+
+        sum += arr[index];
+        if( findTarget(index+1, sum, target, arr)) return true;
+
+        sum -= arr[index];
+        return findTarget(index + 1, sum, target, arr);
+    }
+    public ArrayList<Integer> subsetSums(int[] arr) {
+        // code here
+        ArrayList<Integer> ans = new ArrayList<>();
+        findSubSetSum(0, arr,0, ans);
+        return ans;
+    }
+    public void findSubSetSum(int index, int[] arr, int sum, ArrayList<Integer> ans){
+        if(index == arr.length){
+            ans.add(sum);
+            return;
+        }
+
+        // pick the current element
+        findSubSetSum(index+1, arr, sum+arr[index], ans);
+        // not pick
+        findSubSetSum(index+1, arr, sum, ans);
+    }
+
+        // Back tracking Problems
+    public static List<List<Integer>> permute(int[] nums) {
+        int n = nums.length;
+        boolean[] vis = new boolean[n];
+        List<List<Integer>> ans = new ArrayList<>();
+        findPermute(nums, vis, ans, new ArrayList<>());
+        return ans;
+    }
+    public static void findPermute(int[] nums, boolean[] vis, List<List<Integer>> ans, List<Integer> ds){
+        if(ds.size() == nums.length){
+            ans.add(new ArrayList<>(ds));
+        }
+
+        for(int i=0; i<nums.length; i++){
+            if(!vis[i]){
+                ds.add(nums[i]);
+                vis[i] = true;
+                findPermute(nums, vis, ans, ds);
+                vis[i] = false;
+                ds.remove(ds.size()-1);
+            }
+        }
+    }
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        Arrays.sort(nums);
+        findSubSetWithDup(0, nums, ans, new ArrayList<>());
+        return ans;
+
+    }
+    public void findSubSetWithDup(int index, int[] nums, List<List<Integer>> ans, List<Integer> res){
+        ans.add(new ArrayList<>(res));
+        for(int i=index; i<nums.length; i++){
+            if(i > index && nums[i]==nums[i-1]) continue;
+            res.add(nums[i]);
+            findSubSetWithDup(i+1, nums, ans, res);
+            res.remove(res.size()-1);
+        }
+    }
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        int[] arr = {1,2,3,4,5,6,7,8,9};
+        List<List<Integer>> ans = new ArrayList<>();
+        findCombination3(0, k, n, ans, new ArrayList<>(), arr);
+        return ans;
+    }
+    public void findCombination3(int index, int k, int target, List<List<Integer>> ans, List<Integer> res, int[] nums){
+        if(k==0 && target==0){
+            ans.add(new ArrayList<>(res));
+            return;
+        }
+        if(index==nums.length+1) return;
+        if(nums[index] <= target && k > 0){
+            res.add(nums[index]);
+            findCombination3(index + 1, k - 1, target - nums[index], ans, res, nums);
+            res.remove(res.size()-1);
+        }
+        findCombination3(index + 1, k, target, ans, res, nums);
+    }
+    public List<String> letterCombinations(String digits) {
+        if(digits.isEmpty()) return new ArrayList<>();
+        List<String> ans = new ArrayList<>();
+        Map<Character, List<Character>> d = new HashMap<>();
+        d.put('2', Arrays.asList('a', 'b', 'c'));
+        d.put('3', Arrays.asList('d', 'e', 'f'));
+        d.put('4', Arrays.asList('g', 'h', 'i'));
+        d.put('5', Arrays.asList('j', 'k', 'l'));
+        d.put('6', Arrays.asList('m', 'n', 'o'));
+        d.put('7', Arrays.asList('p', 'q', 'r', 's'));
+        d.put('8', Arrays.asList('t', 'u', 'v'));
+        d.put('9', Arrays.asList('w', 'x', 'y', 'z'));
+        findLetterCombinations(0, digits, ans, new StringBuffer(), d);
+        return ans;
+    }
+    public void findLetterCombinations(int index, String digits, List<String> ans, StringBuffer res, Map<Character, List<Character>> d){
+        if(index == digits.length()){
+            ans.add(res.toString());
+            return;
+        }
+        for(Character c: d.get(digits.charAt(index))){
+            res.append(c);
+            findLetterCombinations(index+1, digits, ans, res, d);
+            res.delete(res.length()-1, res.length());
+        }
+    }
+    public List<List<String>> partition(String s) {
+        List<List<String>> ans = new ArrayList<>();
+        findPartition(0, s, ans, new ArrayList<>());
+        return ans;
+    }
+    public void findPartition(int index, String s, List<List<String>> ans, List<String> res){
+        if(index==s.length()){
+            ans.add(new ArrayList<>(res));
+            return;
+        }
+        for(int i=index; i<s.length(); i++){
+            if(isPallindrom(s, index, i)){
+                res.add(s.substring(index, i+1));
+                findPartition(i+1, s, ans, res);
+                res.remove(res.size()-1);
+            }
+        }
+    }
+    public boolean isPallindrom(String s, int start, int end){
+        while(start <= end){
+            if(s.charAt(start) != s.charAt(end)) return false;
+            start++;
+            end--;
+        }
+        return true;
+    }
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> ans = new ArrayList<>();
+        char[][] board = new char[n][n];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                board[i][j]= '.';
+            }
+        }
+        generateQueen(0, ans, board);
+        return ans;
+    }
+    public void generateQueen(int col, List<List<String>> ans, char[][] board){
+        if(col == board.length){
+            ans.add(construct(board));
+            return;
+        }
+        for(int row = 0; row < board.length; row++){
+            if(isPossible(row, col, board)){
+                board[row][col] = 'Q';
+                generateQueen(col+1, ans, board);
+                board[row][col] = '.';
+            }
+        }
+    }
+    public boolean isPossible(int row, int col, char[][] board){
+        // diagonal up
+        int r = row;
+        int c = col;
+        while(row >= 0 && col >= 0){
+            if(board[row][col] == 'Q') return false;
+            row--;
+            col--;
+        }
+
+        // col backward
+        col = c;
+        row = r;
+        while(col >= 0){
+            if(board[row][col] == 'Q') return false;
+            col--;
+        }
+
+        // diagonal down
+        row = c;
+        col = c;
+        while(row < board.length && col >= 0){
+            if(board[row][col] == 'Q') return false;
+            row++;
+            col--;
+        }
+        return true;
+    }
+    public List<String> construct(char[][] board){
+        List<String> res = new ArrayList<>();
+        for (char[] chars : board) {
+            String s = new String(chars);
+            res.add(s);
+        }
+        return res;
+    }
+    public ArrayList<String> findPath(ArrayList<ArrayList<Integer>> mat) {
+        // code here
+        int n = mat.size();
+        if(mat.get(n-1).get(n-1) != 1) return new ArrayList<>();
+        int[] delRow = {1, 0, 0, -1};
+        int[] delCol = {0, -1, 1, 0};
+        char[] position = {'D', 'L', 'R', 'U'};
+        boolean[][] pathVisited = new boolean[n][n];
+        pathVisited[0][0]=true;
+        ArrayList<String> ans = new ArrayList<>();
+        findRatPossiblePath(0,0,delRow,delCol, mat, pathVisited, new ArrayList<>(),ans, position);
+        return ans;
+    }
+    public void findRatPossiblePath(int row, int col, int[] delRow, int[] delCol, ArrayList<ArrayList<Integer>> mat, boolean[][] path, List<Character> res, ArrayList<String> ans, char[] position){
+        if(row == mat.size()-1 && col == mat.size()-1){
+            ans.add(constructToString(res));
+            return;
+        }
+        for(int i=0; i<mat.size(); i++){
+            int r = row + delRow[i];
+            int c = col + delCol[i];
+            if(r >=0 && r < mat.size() && c >=0 && c < mat.size()){
+                if(mat.get(r).get(c) == 1 && !path[r][c]){
+                    path[r][c]=true;
+                    res.add(position[i]);
+                    findRatPossiblePath(r, c, delRow, delCol, mat, path,res,ans, position);
+                    res.remove(res.size()-1);
+                    path[r][c]=false;
+                }
+            }
+        }
+    }
+    public String constructToString(List<Character> res){
+        String s = "";
+        for(Character c : res){
+            s += c;
+        }
+        return s;
+    }
+    boolean graphColoring(int v, List<int[]> edges, int m) {
+        // code here
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        int[] color = new int[v];
+        for(int i=0; i<v; i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int[] edge: edges){
+            adj.get(edge[0]).add(edge[1]);
+            adj.get(edge[1]).add(edge[0]);
+        }
+        return getColor(0, adj, color, m);
+    }
+    public boolean getColor(int node, ArrayList<ArrayList<Integer>> adj, int[] colorArray, int m){
+        if(node == colorArray.length) return true;
+        for(int color=1; color <= m; color++){
+            if(isPossibleToColor(node, colorArray, color, adj)){
+                colorArray[node] = color;
+                if(getColor(node+1, adj, colorArray, m)) return true;
+                colorArray[node] = 0;
+            }
+        }
+        return false;
+    }
+    public boolean isPossibleToColor(int node, int[] colorArray, int color, ArrayList<ArrayList<Integer>> adj){
+        for(int adjNode: adj.get(node)){
+            if(colorArray[adjNode] == color) return false;
+        }
+        return true;
+    }
+    public boolean wordSearch(char[][] board, String word) {
+        int m = board.length, n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int[] delRow = {0, -1, 0, 1};
+        int[] delCol = {-1, 0, 1, 0};
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(word.charAt(0)==board[i][j]){
+                    if(findWordSearch(i, j, board, word, visited, delRow, delCol)) return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean findWordSearch(int row, int col, char[][] board, String word, boolean[][] visited, int[] delRow, int[] delCol){
+        visited[row][col] = true;
+
+        for(int i=0; i<4; i++){
+            int r = row + delRow[i];
+            int c = row + delCol[i];
+            if(r >= 0 && r <board.length && c >=0 && c < board.length){
+
+            }
+
+        }
+        return true;
+    }
+    // pending need to solve above ^
+
+                     // Binary Tree---->
     // using 1 stack
     public List<Integer> postorderTraversal(TreeNode root) {
         Stack<TreeNode> s = new Stack<>();
@@ -1572,7 +1880,6 @@ public class Practice {
         }
         return ans;
     }
-
     //pre post in order by using one traversal only
     public static void prePostInOrderByOneTraversalOnly(TreeNode root){
         Stack<PairNode> sk = new Stack<>();
@@ -2391,7 +2698,7 @@ public class Practice {
             return new int[]{};
         }
     }
-    // solve prob if you have not done any prob on a day: 802. Find Eventual Safe States:: https://leetcode.com/problems/find-eventual-safe-states/description/
+        // solve prob if you have not done any prob on a day: 802. Find Eventual Safe States:: https://leetcode.com/problems/find-eventual-safe-states/description/
     public List<Integer> eventualSafeNodes(int[][] graph) {
         // reverse all the edges to use topological order in terms of inDegree fun
         int m = graph.length;
@@ -2762,9 +3069,7 @@ public class Practice {
         }
         return -1;
     }
-
-    // if the graph has -ve wt djisktras will fail that will solve by bellmanFord
-
+        // if the graph has -ve wt djisktras will fail that will solve by bellmanFord
     static int[] bellmanFord(int V, int[][] edges, int src) {
         // Write your code here
         int[] dis = new int[V];
@@ -2793,8 +3098,7 @@ public class Practice {
         }
         return dis;
     }
-
-    // Floyd Warshall for all pair nodes
+        // Floyd Warshall for all pair nodes
     public void shortestDistance(int[][] mat) {
         // Code here
         int n = mat.length;
@@ -2895,6 +3199,581 @@ public class Practice {
         return spanningTreeWt;
     }
 
+    // DP Problems
+    public int climbStairs(int n) {
+        int[] stepsPresent = new int[n+1];
+        stepsPresent[0]=1;
+        stepsPresent[1]=1;
+        return findWays(n, stepsPresent);
+    }
+    public int findWays(int steps, int[] stepsPresent){
+        if(steps==0 || steps==1) return 1;
+        if(stepsPresent[steps]!=0){
+            return stepsPresent[steps];
+        }
+        int step =  findWays(steps-1, stepsPresent) + findWays(steps-2, stepsPresent);
+        stepsPresent[steps] = step;
+        return step;
+    }
+    public int minCost(int[] height) {
+        // code here
+        int n = height.length;
+        int[] dp = new int[n+1];
+        Arrays.fill(dp, -1);
+        return findMinCost(n, dp, height);
+    }
+    public int findMinCost(int index, int[] dp, int[] heights){
+        if(index==0) return 0;
+        if(dp[index] != -1) return dp[index];
+        int left = findMinCost(index-1, dp, heights) + Math.abs(heights[index] - heights[index-1]);
+        int right=Integer.MAX_VALUE;
+        if(index>1){
+            right = findMinCost(index-2, dp, heights) + Math.abs(heights[index] - heights[index-2]);
+        }
+        dp[index] = Math.min(left, right);
+        return Math.min(left, right);
+    }
+    public int minimizeCost(int k, int[] arr) {
+        // code here
+        int n = arr.length;
+        int[] dp = new int[n];
+        Arrays.fill(dp, -1);
+        return findMinimizeCost(n-1, k, arr, dp);
+    }
+    public int findMinimizeCost(int n, int steps, int[] arr, int[] dp){
+        if(n==0) return 0;
+        if(dp[n] != -1) return dp[n];
+        int minCost = Integer.MAX_VALUE;
+        for(int i=1; i <= steps; i++){
+            if(n-i >= 0){
+                minCost = Math.min(minCost, findMinimizeCost(n-i, steps, arr, dp) + Math.abs(arr[n]-arr[n-i]));
+            }
+        }
+        dp[n] = minCost;
+        return minCost;
+    }
+    public int rob(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        int[] arr1 = new int[n-1];
+        System.arraycopy(nums, 0, arr1, 0, n - 1);
+        int[] arr2 = new int[n-1];
+        for(int i=0; i<n-1; i++){
+            arr1[i] = nums[i];
+        }
+        for(int j=1; j<n; j++){
+            arr1[j-1] = nums[j];
+        }
+        Arrays.fill(dp, -1);
+        int a = findMaxCost(n-2, arr1, dp);
+        Arrays.fill(dp, -1);
+        int b = findMaxCost(n-2, arr2, dp);
+        return Math.max(a, b);
+    }
+    public int findMaxCost(int index, int[] nums, int[] dp){
+        if(index == 0) return nums[0];
+        if(index < 0) return 0;
+        if(dp[index] != -1) return dp[index];
+        int pick = nums[index] + findMaxCost(index-2, nums, dp);
+        int notPick = findMaxCost(index-1, nums, dp);
+        dp[index] = Math.max(pick, notPick);
+        return dp[index];
+    }
+        // 2-D array
+    public int maximumPoints(int[][] arr) {
+        // code here
+        int n = arr.length;
+        int[][] dp = new int[n][4];
+        for(int[] dpRow: dp){
+            Arrays.fill(dpRow,-1);
+        }
+        return findMaximumPoints(n-1, 3, arr, dp);
+    }
+    public int findMaximumPoints(int day, int lastTask, int[][] arr, int[][] dp){
+        if(dp[day][lastTask] != -1) return dp[day][lastTask];
+        if(day == 0){
+            int maxPoint = 0;
+            for(int task=0; task<3; task++){
+                if( task != lastTask){
+                    maxPoint = Math.max(maxPoint, arr[0][task]);
+                }
+            }
+            return dp[day][lastTask] = maxPoint;
+        }
+        int maxPoint = 0;
+        for(int task=0; task<3; task++){
+            if( task != lastTask ){
+                int points = arr[day][task] + findMaximumPoints(day-1, task, arr, dp);
+                maxPoint = Math.max(maxPoint, points);
+            }
+        }
+        return dp[day][lastTask] = maxPoint;
+    }
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        for(int[] rowDp: dp){
+            Arrays.fill(rowDp, -1);
+        }
+//        dp[m-1][n-1] = 1;
+//        return findUniquePaths(0, 0, dp);
+//        dp[0][0] = 1;
+//        return findUniquePaths(m-1, n-1, dp);
+
+        // Optimized the space by using dp in the calculation
+        for(int row=0; row<m; row++){
+            for(int col=0; col <n; col++){
+                if(row ==0 && col == 0) dp[row][col]=1;
+                else{
+                    int up=0, left=0;
+                    if(row > 0) up = dp[row-1][col];
+                    if(col > 0) left = dp[row][col-1];
+                    dp[row][col] = up + left;
+                }
+            }
+        }
+        return dp[m-1][n-1];
+    }
+    public int findUniquePaths(int row, int col, int[][] dp){
+//        top down approach
+//        if(row >= dp.length || col >= dp[0].length) return 0;
+//        if(dp[row][col] != -1) return dp[row][col];
+//        return findUniquePaths(row+1, col, dp) + findUniquePaths(row, col+1, dp);
+
+        if(row == 0 && col == 0) return dp[row][col];
+        if(row < 0 || col < 0) return 0;
+        if(dp[row][col] != -1) return dp[row][col];
+        return dp[row][col] = findUniquePaths(row-1, col, dp) + findUniquePaths(row, col, dp);
+
+    }
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        for(int[] rowDp: dp){
+            Arrays.fill(rowDp, -1);
+        }
+        dp[m-1][n-1] = 1;
+        return findUniquePathsWithObstacles(0,0, obstacleGrid, dp);
+    }
+    public int findUniquePathsWithObstacles(int row, int col, int[][] obstacleGrid, int[][] dp){
+        if(row >= obstacleGrid.length || col >= obstacleGrid[0].length || obstacleGrid[row][col] == 1) return 0;
+        if(dp[row][col] != -1) return dp[row][col];
+        return dp[row][col] = findUniquePathsWithObstacles(row+1, col, obstacleGrid, dp) + findUniquePathsWithObstacles(row, col+1, obstacleGrid, dp);
+    }
+    public int minPathSum(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        int[][] dp = new int[m][n];
+        for(int[] rowDp: dp){
+            Arrays.fill(rowDp, -1);
+        }
+//        return findMinPathSum(m-1, n-1, grid, dp);
+
+        // using tabular method
+        int[] prev = new int[m];
+        for(int row=0; row<m; row++){
+            int[] curr = new int[n];
+            for(int col=0; col < n; col++){
+                if(row == 0 && col == 0) curr[col] = grid[row][col];
+                else{
+                    int top = Integer.MAX_VALUE, left =Integer.MAX_VALUE;
+                    if(row > 0){
+                        top = prev[col];
+                    }
+                    if(col > 0){
+                        left = curr[col-1];
+                    }
+                    curr[col] = grid[row][col] + Math.min(top, left);
+                }
+            }
+            prev = curr;
+        }
+        return prev[n-1];
+    }
+    public int findMinPathSum(int row, int col, int[][] grid, int[][] dp){
+//        if(row >= grid.length || col >= grid[0].length) return;
+//        if(row == grid.length-1 && col == grid[0].length-1){
+//            pathSum[0] = Math.min(pathSum[0], sum);
+//        }
+//        sum += grid[row][col];
+//        findMinPathSum(row+1, col, pathSum, grid, sum);
+//        findMinPathSum(row, col+1, pathSum, grid, sum);
+        if(row == 0 && col ==0) return grid[0][0];
+        if(row < 0 || col < 0) return Integer.MAX_VALUE;
+        if(dp[row][col] != -1) return dp[row][col];
+        int up = grid[row][col] + findMinPathSum(row-1, col, grid, dp);
+        int left = grid[row][col] + findMinPathSum(row, col-1, grid, dp);
+        return dp[row][col] = Math.min(up, left);
+    }
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int m = triangle.size();
+        int n = triangle.get(m-1).size();
+        int[][] dp = new int[m][n];
+        for(int[] dpNew : dp){
+            Arrays.fill(dpNew, -1);
+        }
+//        int minValue = Integer.MAX_VALUE;
+//        for(int col =0; col < n; col++){
+//            minValue = Math.min(minValue, findMinimumTotal(m-1, col, dp, triangle));
+//        }
+//        return minValue;
+
+        // tabular method bottom up : base case is in n-1
+//        for(int col=0; col <n; col++){
+//            dp[m-1][col] = triangle.get(m-1).get(col);
+//        }
+//        for(int i=m-2; i>=0; i--){
+//            for(int j=i; j >= 0; j--){
+//                int d = triangle.get(i).get(j) + dp[i+1][j];
+//                int dg = triangle.get(i).get(j) + dp[i+1][j+1];
+//                dp[i][j] = Math.min(d, dg);
+//            }
+//        }
+//        return dp[0][0];
+
+//        further optimized it to using dp of size 1D
+        int [] prev = new int[n];
+        for(int col=0; col <n; col++){
+            prev[col] = triangle.get(m-1).get(col);
+        }
+        for(int i=m-2; i>= 0; i--){
+            int[] curr = new int[n];
+            for(int j=i; j>=0; j--){
+                int d = triangle.get(i).get(j) + prev[j];
+                int dg = triangle.get(i).get(j) + prev[j+1];
+                curr[j] = Math.min(d, dg);
+            }
+            prev = curr;
+        }
+        return prev[0];
+    }
+    public int findMinimumTotal(int row, int col, int[][] dp, List<List<Integer>> triangle){
+//        bottom up
+//        if(row == 0 && col == 0) return dp[row][col] = triangle.get(row).get(col);
+//        if(row < 0 || col < 0 || col >= row+1) return Integer.MAX_VALUE;
+//        if(dp[row][col] != -1) return dp[row][col];
+//        int up = findMinimumTotal(row-1, col, dp, triangle);
+//        int upLeft = findMinimumTotal(row-1, col -1, dp, triangle);
+//        return dp[row][col] = triangle.get(row).get(col) + Math.min(up, upLeft);
+
+        // top down with base case as n-1
+        if(row == dp.length-1) return dp[row][col] = triangle.get(row).get(col);
+
+        if(dp[row][col] != -1) return dp[row][col];
+        int down = findMinimumTotal(row+1, col, dp, triangle);
+        int downDiagonal = findMinimumTotal(row+1, col+1,dp,triangle);
+        return dp[row][col] = triangle.get(row).get(col) + Math.min(downDiagonal, down);
+
+
+    }
+    public int minFallingPathSum(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[][] dp = new int[m][n];
+        for(int[] dpNew: dp){
+            Arrays.fill(dpNew, -1);
+        }
+        int minPathSum = Integer.MAX_VALUE;
+//        for(int i=0; i< n; i++){
+//            minPathSum = Math.min(minPathSum, findMinFallingPathSum(m-1, i, dp, matrix));
+//        }
+//        return minPathSum;
+
+        // tabulation
+        for(int i=0; i<n; i++){
+            dp[0][i] = matrix[0][i];
+        }
+
+        for(int i=1; i<n; i++){
+            for(int j=0; j<n; j++){
+                int up = matrix[i][j] + dp[i-1][j];
+                int dgL = (int) Math.pow(10, 9);
+                if(j-1 >= 0) dgL = matrix[i][j] + dp[i-1][j-1];
+                int minPath = Math.min(up, dgL);
+                int dgR = (int) Math.pow(10, 9);
+                if(j+1 < n) dgR = matrix[i][j] + dp[i-1][j+1];
+                dp[i][j] = Math.min(minPath, dgR);
+            }
+        }
+        int min = (int) Math.pow(10, 9);
+        for(int i=0; i<n; i++){
+            min = Math.min(min, dp[m-1][i]);
+        }
+        return min;
+    }
+    public int findMinFallingPathSum(int row, int col, int[][] dp, int[][] matrix){
+
+        if(col < 0 || col >= matrix[0].length)  return Integer.MAX_VALUE;
+        if(row == 0) return dp[row][col] = matrix[row][col];
+        if(dp[row][col] != -1) return dp[row][col];
+        int up = matrix[row][col] + findMinFallingPathSum(row-1, col,dp,matrix);
+        int diagonalL = matrix[row][col] + findMinFallingPathSum(row-1, col-1, dp, matrix);
+        int minPath = Math.min(up, diagonalL);
+        int diagonalR = matrix[row][col] + findMinFallingPathSum(row-1, col+1, dp, matrix);
+        return dp[row][col] = Math.min(minPath, diagonalR);
+    }
+
+        // 3D dp
+    public int solve(int n, int m, int[][] grid) {
+        // Code here
+        int[][][] dp = new int[n][m][m];
+        for(int[][] dpn: dp){
+            for(int[] dpN: dpn){
+                Arrays.fill(dpN, -1);
+            }
+        }
+        return findMaxChoco(0, 0, m-1, grid, dp);
+
+    }
+    public int findMaxChoco(int r, int c1, int c2, int[][] grid, int[][][] dp){
+        if(c1 < 0 || c2 < 0 || c1 >= grid[0].length || c2 >= grid[0].length) return (int) -1e9;
+        if(r== grid.length-1){
+            if(c1 == c2){
+                return dp[r][c1][c2] = grid[r][c1];
+            }
+            else{
+                return dp[r][c1][c2] = grid[r][c1] + grid[r][c2];
+            }
+        }
+        if(dp[r][c1][c2] != -1) return dp[r][c1][c2];
+        int maxChoc = (int) -1e9;
+        for(int i=-1; i<2; i++){
+            for(int j=-1; j<2; j++){
+                if(c1 == c2){
+                    maxChoc = Math.max(maxChoc, grid[r][c1]+findMaxChoco(r+1, c1+i, c2+j, grid, dp));
+                }else{
+                    maxChoc = Math.max(maxChoc, grid[r][c1]+grid[r][c2]+findMaxChoco(r+1, c1+i, c2+j, grid, dp));
+                }
+            }
+        }
+        return dp[r][c1][c2] = maxChoc;
+    }
+        // sub seq on dp
+    static Boolean isSubsetSum(int[] arr, int target) {
+        // code here
+        int[][] dp = new int[arr.length][target+1];
+        for(int[] dpN: dp){
+            Arrays.fill(dpN, -1);
+        }
+        return findTargetDp(arr.length-1, target, arr, dp);
+    }
+    public static boolean findTargetDp(int index, int target, int[] arr, int[][] dp){
+//        if(sum > target) return false;
+//        if(index == arr.length){
+//            return sum == target;
+//        }
+//        sum += arr[index];
+//        if(findTargetDp(index+1, sum, target, arr)) return true;
+//        sum -= arr[index];
+//        return findTargetDp(index + 1, sum, target, arr);
+        // using dp fun start from n-1
+        if(target == 0) return true;
+        if(index ==0){
+            return arr[index] == target;
+        }
+        if(dp[index][target] != -1) return dp[index][target]==1;
+        boolean notTake = findTargetDp(index-1, target, arr, dp);
+        boolean take = false;
+        if(arr[index] <= target){
+            take = findTargetDp(index-1, target-arr[index], arr, dp);
+        }
+        dp[index][target] = (notTake || take) ? 1 : 0;
+        return notTake || take;
+    }
+    public boolean canPartition(int[] nums) {
+        int sum=0;
+        for(int num: nums){
+            sum += num;
+        }
+        if(sum %2 != 0) return false;
+        int target = sum/2;
+//        int[][] dp = new int[nums.length][target+1];
+//        for(int[] dpN: dp){
+//            Arrays.fill(dpN, -1);
+//        }
+//        return findCanPartition(nums.length-1, target, nums, dp);
+        // using tabular method
+        boolean[][] dp = new boolean[nums.length][target+1];
+        for(int i=0; i<nums.length; i++){
+            dp[i][0] = true;
+        }
+        if(nums[0] <= target) dp[0][nums[0]] = true;
+        for(int i=1; i<nums.length; i++){
+            for(int t=1; t < target+1; t++){
+                boolean notPick = dp[i-1][t];
+                boolean pick=false;
+                if(nums[i] <= t){
+                    pick = dp[i-1][t - nums[i]];
+                }
+                dp[i][t] = pick || notPick;
+            }
+        }
+        return dp[nums.length-1][target];
+    }
+    public boolean findCanPartition(int index, int target, int[] arr, int[][] dp){
+        if(target == 0) return true;
+        if(index == 0){
+            return arr[index] == target;
+        }
+        if(dp[index][target] != -1) return dp[index][target] == 1;
+        boolean notPick = findCanPartition(index-1, target, arr, dp);
+        boolean pick=false;
+        if(arr[index] <= target){
+            pick = findCanPartition(index-1, target-arr[index], arr, dp);
+        }
+        dp[index][target] = pick || notPick ? 1 : 0;
+        return pick || notPick;
+    }
+    public int perfectSumDP(int[] nums, int target) {
+        // code here
+        int n = nums.length;
+        int[][] dp = new int[n][target+1];
+        for(int[] dpN: dp){
+            Arrays.fill(dpN, -1);
+        }
+//        return findTarget(0, target, nums, dp);
+        return findTarget2(n-1, target, nums, dp);
+    }
+    public int findTarget(int index, int target, int[] nums, int[][] dp){
+        if(index >= nums.length-1){
+            if(target == 0) return 1;
+            return 0;
+        }
+        if(dp[index][target] != -1) return dp[index][target];
+        int notPick = findTarget(index+1, target, nums, dp);
+        int pick = 0;
+        if(nums[index] <= target){
+            pick = findTarget(index +1, target-nums[index], nums, dp);
+        }
+        return dp[index][target] = pick + notPick;
+    }
+    public int findTarget2(int index, int target, int[] nums, int[][] dp){
+//        below base case will fail if num[i] <= 0 it only works for num[i] <= 1
+//        if(target == 0) return 1;
+//        if(index == 0) return nums[0] == target ? 1 : 0;
+
+        // updating the above base case for scenario num[i] <= 0
+        if(index == 0){
+            if(nums[index] == 0 && target == 0) return 2;
+            if(target == 0 || nums[index] == target) return 1;
+            return 0;
+        }
+
+        if(dp[index][target] != -1) return dp[index][target];
+        int notPick = findTarget2(index-1, target, nums, dp);
+        int pick = 0;
+        if(nums[index] <= target){
+            pick = findTarget2(index-1, target - nums[index], nums, dp);
+        }
+        return dp[index][target] = pick+notPick;
+    }
+
+    public int minimumDifference(int[] nums) {
+        int min = Integer.MAX_VALUE;
+        for(int num: nums){
+            min = Math.min(min, num);
+        }
+        int totalSum = 0;
+        boolean negative = false;
+        for(int i=0; i<nums.length; i++){
+            if(min < 0) {
+                negative = true;
+                nums[i] -= min;
+            }
+            totalSum += nums[i];
+        }
+
+        boolean[][] dp = new boolean[nums.length][totalSum+1];
+        for(int i=0; i<nums.length; i++){
+            dp[i][0] = true;
+        }
+        if(nums[0] <= totalSum) dp[0][nums[0]] = true;
+
+        for(int index=1; index < nums.length; index++){
+            for(int target=1; target < totalSum+1; target++){
+                boolean notPick = dp[index-1][target];
+                boolean pick = false;
+                if(nums[index] <= target){
+                    pick = dp[index-1][target - nums[index]];
+                }
+                dp[index][target] = pick || notPick;
+            }
+        }
+
+        int minDiff = Integer.MAX_VALUE;
+        for(int i=0; i<totalSum+1; i++){
+            if(dp[nums.length-1][i]){
+                int diff = Math.abs(i - (totalSum-i));
+                minDiff = Math.min(minDiff, negative ? diff-min: diff);
+            }
+
+        }
+        return minDiff;
+    }
+//    int countPartitions(int[] arr, int d) {
+//        // code here
+//    }
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        Arrays.sort(coins);
+        int[][] dp = new int[n][amount+1];
+        int ans = findCoinChange(n-1, coins, amount, dp);
+//        if(ans >= (int) 1e9) return -1;
+//        return ans;
+
+        // tabulation
+        for(int target=0; target < amount+1; target++){
+            if(target % coins[0] == 0) dp[0][target] = target/coins[0];
+            else{
+                dp[0][target] = (int) 1e9;
+            }
+        }
+        for(int ind=1; ind < n; ++ind){
+            for(int target=0; target < amount+1; target++){
+                int notTake = dp[ind-1][target];
+                int take = Integer.MAX_VALUE;
+                if(coins[ind] <= target){
+                    take = 1 + findCoinChange(ind, coins, target - coins[ind], dp);
+                }
+                dp[ind][target] = Math.min(take, notTake);
+            }
+        }
+        ans = dp[n-1][amount];
+        if(ans >= (int) 1e9) return -1;
+        return ans;
+    }
+    public int findCoinChange(int index, int[] coins, int target, int[][] dp){
+        if(index == 0){
+            if(target % coins[index] == 0) return target/coins[index];
+            return (int) 1e9;
+        }
+        int notTake = findCoinChange(index-1, coins, target, dp);
+        int take = Integer.MAX_VALUE;
+        if(coins[index] <= target){
+            take = 1 + findCoinChange(index, coins, target - coins[index], dp);
+        }
+        return Math.min(take, notTake);
+    }
+
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int n = gas.length;
+        int totalGas=0, totalCost=0;
+        for(int i=0; i<n; i++){
+            totalGas += gas[i];
+            totalCost += cost[i];
+        }
+        if(totalCost > totalGas) return -1;
+
+        int start = 0, fuelTank = 0;
+        for(int i=0; i<n; i++){
+            fuelTank += gas[i] - cost[i];
+            if(fuelTank < 0){
+                start = i+1;
+                fuelTank = 0;
+            }
+        }
+        return start;
+    }
+
     public static void main(String[] args){
 //        TreeNode root = new TreeNode(1);
 //        root.left = new TreeNode(2);
@@ -2924,5 +3803,8 @@ public class Practice {
 //        Arrays.sort(b);
 //        boolean q = Arrays.equals(a, b);
 //        System.out.println(findInversionPair(array));
+//        int[] inp = {1,2,3};
+//        List<List<Integer>> ans = permute(inp);
+//        System.out.println(ans);
     }
 }
